@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package teistris;
-//papafrita
+
 import java.awt.Color;
 
 /**
@@ -139,34 +139,64 @@ public class Piece {
     }
 
     /**
-     * Move a ficha á dereita se é posible
-     *
-     * @return true se o movemento da ficha é posible, se non false
-     */
-    public boolean moveRight() {
-            
+ * Move a ficha á dereita se é posible
+ *
+ * @return true se o movemento da ficha é posible, se non false
+ */
+public boolean moveRight() {
+    if (game.isValidPosition(a.getX() + Game.SQUARE_SIDE, a.getY()) &&
+        game.isValidPosition(b.getX() + Game.SQUARE_SIDE, b.getY()) &&
+        game.isValidPosition(c.getX() + Game.SQUARE_SIDE, c.getY()) &&
+        game.isValidPosition(d.getX() + Game.SQUARE_SIDE, d.getY())) {
+        
+        a.setX(a.getX() + Game.SQUARE_SIDE);
+        b.setX(b.getX() + Game.SQUARE_SIDE);
+        c.setX(c.getX() + Game.SQUARE_SIDE);
+        d.setX(d.getX() + Game.SQUARE_SIDE);
         return true;
     }
+    return false;
+}
 
-    /**
-     * Move a ficha á esquerda se é posible
-     *
-     * @return true se o movemento da ficha é posible, se non false
-     */
-    public boolean moveLeft() {
-
+/**
+ * Move a ficha á esquerda se é posible
+ *
+ * @return true se o movemento da ficha é posible, se non false
+ */
+public boolean moveLeft() {
+    if (game.isValidPosition(a.getX() - Game.SQUARE_SIDE, a.getY()) &&
+        game.isValidPosition(b.getX() - Game.SQUARE_SIDE, b.getY()) &&
+        game.isValidPosition(c.getX() - Game.SQUARE_SIDE, c.getY()) &&
+        game.isValidPosition(d.getX() - Game.SQUARE_SIDE, d.getY())) {
+        
+        a.setX(a.getX() - Game.SQUARE_SIDE);
+        b.setX(b.getX() - Game.SQUARE_SIDE);
+        c.setX(c.getX() - Game.SQUARE_SIDE);
+        d.setX(d.getX() - Game.SQUARE_SIDE);
         return true;
     }
+    return false;
+}
 
-    /**
-     * Move a ficha a abaixo se é posible
-     *
-     * @return true se o movemento da ficha é posible, se non false
-     */
-    public boolean moveDown() {
-
+/**
+ * Move a ficha a abaixo se é posible
+ *
+ * @return true se o movemento da ficha é posible, se non false
+ */
+public boolean moveDown() {
+    if (game.isValidPosition(a.getX(), a.getY() + Game.SQUARE_SIDE) &&
+        game.isValidPosition(b.getX(), b.getY() + Game.SQUARE_SIDE) &&
+        game.isValidPosition(c.getX(), c.getY() + Game.SQUARE_SIDE) &&
+        game.isValidPosition(d.getX(), d.getY() + Game.SQUARE_SIDE)) {
+        
+        a.setY(a.getY() + Game.SQUARE_SIDE);
+        b.setY(b.getY() + Game.SQUARE_SIDE);
+        c.setY(c.getY() + Game.SQUARE_SIDE);
+        d.setY(d.getY() + Game.SQUARE_SIDE);
         return true;
     }
+    return false;
+}
 
     /**
      * Rota a ficha se é posible
