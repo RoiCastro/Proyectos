@@ -168,7 +168,7 @@ public class Game {
      * Crea unha nova peza e a establece como peza actual do xogo
      */
     private void createNewPiece() {
-        Piece piece = new Piece(this);
+        currentPiece = new Piece(this);
     }
 
     /**
