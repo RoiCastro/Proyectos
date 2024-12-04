@@ -15,6 +15,9 @@ public class Aforcado {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        WordGenerator word =new WordGenerator();
+        
+        System.out.println(word.generateWord());
     }
     
 }
