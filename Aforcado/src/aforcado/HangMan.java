@@ -4,14 +4,49 @@
  */
 package aforcado;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author roi.castrocalvar
  */
 class HangMan {
 
-    HangMan(String showInitMenu) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    private static final int MAX_FAILS = 6;
+    private HiddenWord hiddenWord;
+    private ArrayList<Character> fails; 
     
+    public ArrayList<Character> getFails(){
+        
+        return null;
+        
+    }
+    public String getStringFails(){
+        
+        return null;
+        
+    }
+    public String showHiddenWord(){
+        
+        return null;
+        
+    }
+    public String showFullWord(){
+        
+        return null;
+        
+    }
+    public void tryChar(char c){
+        
+    }
+    public boolean isGameOver(){   
+        
+        return false;
+        
+    }
+    public boolean maxFailsExceeded(){
+        
+        return false;
+        
+    }
 }
