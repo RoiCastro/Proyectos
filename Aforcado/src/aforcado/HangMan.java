@@ -15,7 +15,7 @@ class HangMan {
     private static final int MAX_FAILS = 6;
     private HiddenWord hiddenWord;
     private ArrayList<Character> fails; 
-    
+
     public ArrayList<Character> getFails(){
         
         return null;
