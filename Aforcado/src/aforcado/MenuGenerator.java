@@ -21,7 +21,7 @@ public class MenuGenerator {
         MenuGenerator menuGenerator = new MenuGenerator();
         
         do {
-            menuGenerator.hangMan = new HangMan();
+            menuGenerator.hangMan = new HangMan(menuGenerator.showInitMenu());
             menuGenerator.showGameMenu();   
         } while (!menuGenerator.showExitMenu());
     }
@@ -37,7 +37,7 @@ public class MenuGenerator {
     }
     private boolean showExitMenu(){
         
-        return false;
+        return true;
         
     }
 }

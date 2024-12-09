@@ -7,50 +7,99 @@ package aforcado;
 import java.util.ArrayList;
 
 /**
- *
+ * Clase que xestiona o estado dunha partida ao Aforcado. 
+ * Contén a lóxica para probar caracteres, almacenar fallos e verificar o estado do xogo.
+ * 
  * @author roi.castrocalvar
  */
 class HangMan {
 
-    private static final int MAX_FAILS = 6;
-    private HiddenWord hiddenWord;
-    private ArrayList<Character> fails; 
+    private static final int MAX_FAILS = 6; // Número máximo de fallos permitidos antes de perder a partida.
+    private HiddenWord hiddenWord; // Obxecto que xestiona a palabra oculta a adiviñar.
+    private ArrayList<Character> fails; // Lista de caracteres fallados polo usuario.
 
-    public ArrayList<Character> getFails(){
-        
-        return null;
-        
+    /**
+     * Construtor que inicializa a partida co obxecto HiddenWord e a lista de fallos.
+     *
+     * @param word A palabra a adiviñar.
+     */
+    public HangMan(String word) {
+        this.hiddenWord = new HiddenWord(word);
+        this.fails = new ArrayList<>();
     }
-    public String getStringFails(){
-        char a='a';
-        fails.add(a);
-        hiddenWord.checkChar(a);
-        
-        
-        return null;
-        
+
+    /**
+     * Obtén a lista de caracteres fallados polo usuario durante a partida.
+     * 
+     * @return A lista de caracteres fallados.
+     */
+    public ArrayList<Character> getFails() {
+        return fails;
     }
-    public String showHiddenWord(){
-        
-        return null;
-        
+
+    /**
+     * Obtén unha representación en formato String da lista de caracteres fallados,
+     * separados por espazos en branco.
+     * 
+     * @return Unha cadea de texto cos caracteres fallados separados por espazos.
+     */
+    public String getStringFails() {
+        StringBuilder resultado = new StringBuilder();
+        for (Character fail : fails) {
+            resultado.append(fail).append(' '); // Engade cada fallo seguido dun espazo.
+        }
+        return resultado.toString().trim(); // Elimina espazos finais ou iniciais.
     }
-    public String showFullWord(){
-        
-        return null;
-        
+
+    /**
+     * Devolve a representación da palabra oculta, mostrando só os caracteres acertados 
+     * e substituíndo os restantes por guións.
+     * 
+     * @return Unha cadea de texto coa palabra parcialmente revelada.
+     */
+    public String showHiddenWord() {
+        return hiddenWord.show();
     }
-    public void tryChar(char c){
-        
+
+    /**
+     * Devolve a palabra completa, mostrando todos os caracteres sen ocultar.
+     * 
+     * @return A palabra completa como unha cadea de texto.
+     */
+    public String showFullWord() {
+        return hiddenWord.showFullWord();
     }
-    public boolean isGameOver(){   
-        
-        return false;
-        
+
+    /**
+     * Proba se un caracter forma parte da palabra oculta. 
+     * Se o caracter non está, engádeo á lista de fallos.
+     * 
+     * @param c O caracter a probar.
+     */
+    public void tryChar(char c) {
+        if (!hiddenWord.checkChar(c)) {
+            if (!fails.contains(c)) { // Evita engadir fallos repetidos.
+                fails.add(c); // Engade o caracter fallado á lista.
+            }
+        }
     }
-    public boolean maxFailsExceeded(){
-        
-        return false;
-        
+
+    /**
+     * Comproba se o xogo rematou, ben porque o usuario acertou toda a palabra 
+     * ou porque chegou ao número máximo de fallos permitidos.
+     * 
+     * @return true se o xogo rematou, false en caso contrario.
+     */
+    public boolean isGameOver() {
+        return maxFailsExceeded() || hiddenWord.isVisible();
+    }
+
+    /**
+     * Comproba se se chegou ao límite máximo de fallos permitidos.
+     * 
+     * @return true se se superou o número máximo de fallos, false en caso contrario.
+     */
+    public boolean maxFailsExceeded() {
+        return fails.size() >= MAX_FAILS;
     }
 }
