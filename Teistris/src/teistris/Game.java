@@ -16,9 +16,6 @@
  */
 package teistris;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Clase que implementa o comportamento do xogo do Tetris
  *
@@ -38,8 +35,6 @@ public class Game {
      * Constante que define o valor máximo da coordenada y no panel de cadrados
      */
     public final static int MAX_Y = 200;
-
-    private Map<String, Square> groundSquares = new HashMap<>();
 
     /**
      * Referenza á peza actual do xogo, que é a única que se pode mover
@@ -163,10 +158,10 @@ public class Game {
      * @return true se esa posición é válida, se non false
      */
     public boolean isValidPosition(int x, int y) {
-        if (x < 0 || x >= MAX_X || y >= MAX_Y) {
+        if ((x == MAX_X) || (x < 0) || (y == MAX_Y)) {
             return false;
         }
-        return !groundSquares.containsKey(x + "," + y);
+        return true;
     }
 
     /**
@@ -181,9 +176,6 @@ public class Game {
      */
     private void addPieceToGround() {
         // Engadimos os cadrados da peza ao chan
-        for (Square square : currentPiece.getSquares()) {
-            groundSquares.put(square.getCoordinates(), square);
-        }
 
         // Chamamos ao método que borra as liñas do chan que estean completas
         this.deleteCompletedLines();
@@ -194,20 +186,7 @@ public class Game {
      * cadrados do chan e súmase unha nova liña no número de liñas realizadas
      */
     private void deleteCompletedLines() {
-        for (int i = 0; i < MAX_Y; i += SQUARE_SIDE) {
-            boolean isComplete = true;
-            for (int j = 0; j < MAX_X; j += SQUARE_SIDE) {
-                if (!groundSquares.containsKey(j + "," + i)) {
-                    isComplete = false;
-                    break;
-                }
-            }
-            if (isComplete) {
-                deleteLine(i);
-                numberOfLines++;
-                mainWindow.showNumberOfLines(numberOfLines);
-            }
-        }
+
     }
 
     /**
@@ -218,21 +197,7 @@ public class Game {
      * @param y Coordenada y da liña a borrar
      */
     private void deleteLine(int y) {
-        for (int i = 0; i < MAX_X; i += SQUARE_SIDE) {
-            Square square = groundSquares.remove(i + "," + y);
-            if (square != null) {
-                mainWindow.deleteSquare(square.getLblSquare());
-            }
-        }
-        for (int ny = y - SQUARE_SIDE; ny >= 0; ny -= SQUARE_SIDE) {
-            for (int j = 0; j < MAX_X; j += SQUARE_SIDE) {
-                Square square = groundSquares.remove(j + "," + ny);
-                if (square != null) {
-                    square.setY(square.getY() + SQUARE_SIDE);
-                    groundSquares.put(square.getCoordinates(), square);
-                }
-            }
-        }
+
     }
 
     /**
@@ -241,11 +206,7 @@ public class Game {
      * @return true se a peza actual choca cos cadrados do chan; se non false
      */
     private boolean hitPieceTheGround() {
-        for (Square square : currentPiece.getSquares()) {
-            if (groundSquares.containsKey(square.getCoordinates())) {
-                return true;
-            }
-        }
+        // Polo momento, non facemos nada
         return false;
     }
 }
