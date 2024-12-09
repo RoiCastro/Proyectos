@@ -11,11 +11,9 @@ package aforcado;
 public class WordGenerator {
     
      private String[] WORDLIST = {"Casa", "Perro", "Jardín", "Escuela", "Manzana", "Mariposa", "Sol", "Río", "Montaña", "Playa", "Coche", "Guitarra", "Biblioteca", "Castillo", "Luna", "Nieve", "Reloj", "Estrella", "Bosque", "Tren"};
-    
-    
+
     public String generateWord(){
-        int value;
-        value = new java.util.Random().nextInt(WORDLIST.length);
+        int value = new java.util.Random().nextInt(WORDLIST.length);
          return WORDLIST[value];
         
     }

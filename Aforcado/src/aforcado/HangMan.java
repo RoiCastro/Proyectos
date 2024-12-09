@@ -22,6 +22,10 @@ class HangMan {
         
     }
     public String getStringFails(){
+        char a='a';
+        fails.add(a);
+        hiddenWord.checkChar(a);
+        
         
         return null;
         
