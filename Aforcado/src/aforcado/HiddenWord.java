@@ -13,18 +13,13 @@ import java.util.ArrayList;
 public class HiddenWord {
     
     private char[] characters;
-    private ArrayList<Boolean> hits ; 
+    private boolean[] hits ; 
 
-    public HiddenWord() {
-        WordGenerator word = new WordGenerator();
-        characters = word.generateWord().toCharArray();
+    public HiddenWord(String word) {
+        characters = word.toCharArray();
         for(int i=0;i<characters.length;i++){
-            hits.add(false);
+            hits[i]=false;
         }
-    }
-
-    public HiddenWord(char[] characters) {
-        this.characters = characters;
     }
 
     
