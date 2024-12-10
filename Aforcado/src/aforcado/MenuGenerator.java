@@ -56,6 +56,8 @@ public class MenuGenerator {
                     break;
                 default:
                     System.out.println("Introduce un numero valido");
+                    System.out.println("");
+                    break;
 
             }
 
@@ -66,7 +68,6 @@ public class MenuGenerator {
     }
 
     private void showGameMenu() {
-
     }
 
     private boolean showExitMenu() {
