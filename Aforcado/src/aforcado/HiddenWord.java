@@ -4,6 +4,8 @@
  */
 package aforcado;
 
+import java.text.Normalizer;
+
 /**
  * Clase que representa a palabra oculta nun xogo de Aforcado. 
  * Xestiona a lóxica para verificar acertos e mostrar os avances.
@@ -29,19 +31,13 @@ public class HiddenWord {
      * Comproba se un caracter aparece na palabra oculta, 
      * marcando todas as súas aparicións como acertadas.
      *
-     * @param c O caracter que se desexa comprobar.
+     * @param c O caracter que se desexa comprobar. Necesita estar en minuscula
      * @return true se o caracter aparece na palabra, false en caso contrario.
      */
     public boolean checkChar(char c) {
         boolean found = false;
-        char lowerC = Character.toLowerCase(c); //Poniendo el caracter a minusculas 
-        char upperC = Character.toUpperCase(c);//Poniendo el caracter a mayusculas
         for (int i = 0; i < characters.length; i++) {
-            if (characters[i] ==  lowerC) {
-                hits[i] = true; // Marca esta letra como acertada.
-                found = true;
-            }
-            if (characters[i] == upperC) {
+            if (characters[i] ==  c) {
                 hits[i] = true; // Marca esta letra como acertada.
                 found = true;
             }
