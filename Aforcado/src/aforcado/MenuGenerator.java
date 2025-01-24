@@ -39,8 +39,8 @@ public class MenuGenerator {
      * @return la palabra generada
      */
     private String showInitMenu() {
-        // Se crea una instancia de WordGenerator para generar una palabra aleatoria
-        WordGenerator wordGenerator = new WordGenerator();
+        // Se crea una instancia de ArrayWordGenerator para generar una palabra aleatoria
+        ArrayWordGenerator wordGenerator = new ArrayWordGenerator();
         // Muestra mensaje de bienvenida y genera la palabra
         System.out.println("Benvido ao Aforcado! Xenerando palabra oculta...");
         return wordGenerator.generateWord(); // Devuelve la palabra generada

@@ -4,8 +4,6 @@
  */
 package aforcado;
 
-import java.text.Normalizer;
-
 /**
  * Clase que representa a palabra oculta nun xogo de Aforcado. Xestiona a lóxica
  * para verificar acertos e mostrar os avances.
@@ -16,6 +14,32 @@ public class HiddenWord {
 
     private char[] characters; // Array que almacena os caracteres da palabra oculta.
     private boolean[] hits; // Array que indica se cada letra foi acertada (true) ou non (false).
+
+    
+     /**
+     * Consigue el arreglo de la characters
+     *
+     * @return
+     */
+    public char[] getCharacters() {
+        return characters;
+    }
+
+    public void setCharacters(char[] characters) {
+        this.characters = characters;
+    }
+    /**
+     * Consigue el arreglo de la hits
+     *
+     * @return
+     */
+    public boolean[] getHits() {
+        return hits;
+    }
+
+    public void setHits(boolean[] hits) {
+        this.hits = hits;
+    }
 
     /**
      * Construtor que inicializa os arrays de caracteres e acertos en función da
