@@ -37,14 +37,18 @@ public class HiddenWord {
      */
     public boolean checkChar(char c) {
         boolean found = false;
-        
+        char lowerC = Character.toLowerCase(c); //Poniendo el caracter a minusculas 
+        char upperC = Character.toUpperCase(c);//Poniendo el caracter a mayusculas
         for (int i = 0; i < characters.length; i++) {
-            if (characters[i] == c) {
+            if (characters[i] == lowerC) {
+                hits[i] = true; // Marca esta letra como acertada.
+                found = true;
+            }
+            if (characters[i] == upperC) {
                 hits[i] = true; // Marca esta letra como acertada.
                 found = true;
             }
         }
-        
         return found;
     }
 
