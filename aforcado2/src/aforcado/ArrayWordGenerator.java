@@ -8,7 +8,7 @@ package aforcado;
  *
  * @author roi.castrocalvar
  */
-public class ArrayWordGenerator {
+public class ArrayWordGenerator implements WordGenerator{
 
     private String[] WORDLIST = {"Casa", "Perro", "Jardín", "Escuela", "Manzana", "Mariposa", "Sol", "Río", "Montaña", "Playa", "Coche", "Guitarra", "Biblioteca", "Castillo", "Luna", "Nieve", "Reloj", "Estrella", "Bosque", "Tren"};
 
@@ -29,6 +29,7 @@ public class ArrayWordGenerator {
         this.WORDLIST = WORDLIST;
     }
 
+    @Override
     public String generateWord() {
         int value = new java.util.Random().nextInt(WORDLIST.length);
         return WORDLIST[value];
