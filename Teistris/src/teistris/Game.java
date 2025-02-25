@@ -173,7 +173,20 @@ public class Game {
      * Crea unha nova peza e a establece como peza actual do xogo
      */
     private void createNewPiece() {
-        currentPiece = new Piece(this);
+        int pieceType = new java.util.Random().nextInt(4);
+        
+        if (pieceType == 0) {
+            currentPiece = new SquarePiece(this);
+        } 
+        if(pieceType == 1){
+            currentPiece = new LPiece(this);
+        }
+        if(pieceType == 2){
+            currentPiece = new BarPiece(this);
+        }
+        if(pieceType == 3){
+            currentPiece = new TPiece(this);
+        }        
     }
 
     /**
