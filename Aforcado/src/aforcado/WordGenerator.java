@@ -15,5 +15,5 @@ public interface WordGenerator {
      *
      * @return
      */
-    public String generateWord();
+    public String generateWord() throws GenerateWordException;
 }

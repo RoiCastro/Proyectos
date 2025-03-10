@@ -38,17 +38,39 @@ public class MenuGenerator {
      *
      * @return la palabra generada
      */
-    private String showInitMenu() {
-        // Se crea una instancia de ArrayWordGenerator para generar una palabra aleatoria
-        ArrayWordGenerator wordGenerator = new ArrayWordGenerator();
-        // Muestra mensaje de bienvenida y genera la palabra
-        System.out.println("Benvido ao Aforcado! Xenerando palabra oculta...");
-        return wordGenerator.generateWord(); // Devuelve la palabra generada
+private String showInitMenu() {
+    // Muestra mensaje de bienvenida y seleccion del modo de juego
+    System.out.println("Benvido ao Aforcado! ");
+    System.out.println("Seleciona o modo de xogo:");
+    System.out.println("1. Palabra aleatoria");
+    System.out.println("2. Escribir palabra");
+    Scanner scan = new Scanner(System.in);
+    int var = scan.nextInt();
+    scan.nextLine();
+    try {
+        switch (var) {
+            case 1:
+                ArrayWordGenerator wordGenerator1 = new ArrayWordGenerator();
+                // Mensaje de creacion de la palabra
+                System.out.println("Xenerando palabra oculta...");
+                // Se crea una instancia de ArrayWordGenerator para generar una palabra aleatoria
+                return wordGenerator1.generateWord(); // Devuelve la palabra generada
+            case 2:
+                KeyboardWordGenerator wordGenerator2 = new KeyboardWordGenerator();
+                System.out.println("Xenerando palabra oculta...");
+                return wordGenerator2.generateWord(); // Devuelve la palabra generada
+        }
+    } catch (GenerateWordException e) {
+        // Si la excepción tiene el atributo 'visible' en true, muestra la mensaje
+        if (e.isVisible()) {
+            System.out.println("Erro ao xerar a palabra: " + e.getMessage());
+        }
     }
-
-    /**
-     * Muestra el menú del juego y gestiona las interacciones del usuario
-     */
+    return null;
+}
+        /**
+         * Muestra el menú del juego y gestiona las interacciones del usuario
+         */
     private void showGameMenu() {
         // Se crea un objeto Scanner para leer las entradas del usuario
         Scanner scan = new Scanner(System.in);
