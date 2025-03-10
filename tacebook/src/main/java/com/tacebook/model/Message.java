@@ -2,7 +2,7 @@
  * Fai clic en nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt para cambiar esta licenza
  * Fai clic en nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java para editar este modelo
  */
-package tacebook;
+package com.tacebook.model;
 
 import java.util.Date;
 

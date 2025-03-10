@@ -2,12 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package tacebook;
+package com.tacebook.view;
 
-/**
- *
- * @author roi.castrocalvar
- */
-public class InitMenuController {
-    
+public class InitMenuView  {
+
+
 }
+
+

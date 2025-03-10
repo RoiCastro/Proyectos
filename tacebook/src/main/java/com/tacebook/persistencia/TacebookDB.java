@@ -2,7 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-package tacebook;
+package com.tacebook.persistencia;
+
+import com.tacebook.model.Profile;
+import java.util.ArrayList;
 
 /**
  *
@@ -10,11 +13,6 @@ package tacebook;
  */
 public class TacebookDB {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-    }
+    public static ArrayList<Profile> profiles;
     
 }
