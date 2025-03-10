@@ -5,10 +5,11 @@
         <group>
             <file>file:/home/aitor.martinezparente/Escritorio/Proyectos/Teistris/src/teistris/MainWindow.java</file>
             <file>file:/home/aitor.martinezparente/Escritorio/Proyectos/Teistris/src/teistris/Game.java</file>
-            <file>file:/home/aitor.martinezparente/Escritorio/Proyectos/Teistris/src/teistris/Square.java</file>
             <file>file:/home/aitor.martinezparente/Escritorio/Proyectos/Teistris/src/teistris/Piece.java</file>
+            <file>file:/home/aitor.martinezparente/Escritorio/Proyectos/Teistris/src/teistris/Square.java</file>
             <file>file:/home/aitor.martinezparente/Escritorio/Proyectos/Teistris/src/teistris/SquarePiece.java</file>
             <file>file:/home/aitor.martinezparente/Escritorio/Proyectos/Teistris/src/teistris/LPiece.java</file>
+            <file>file:/home/aitor.martinezparente/Escritorio/Proyectos/Teistris/src/teistris/InvLPiece.java</file>
             <file>file:/home/aitor.martinezparente/Escritorio/Proyectos/Teistris/src/teistris/BarPiece.java</file>
             <file>file:/home/aitor.martinezparente/Escritorio/Proyectos/Teistris/src/teistris/TPiece.java</file>
         </group>

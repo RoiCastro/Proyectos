@@ -16,6 +16,7 @@
  */
 package teistris;
 
+import view.MainWindow;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -163,7 +164,7 @@ public class Game {
      * @return true se esa posición é válida, se non false
      */
     public boolean isValidPosition(int x, int y) {
-        if (x < 0 || x >= MAX_X || y >= MAX_Y) {
+        if (x < 0 || x >= MAX_X || y < 0 || y >= MAX_Y) {
             return false;
         }
         return !groundSquares.containsKey(x + "," + y);
@@ -173,7 +174,7 @@ public class Game {
      * Crea unha nova peza e a establece como peza actual do xogo
      */
     private void createNewPiece() {
-        int pieceType = new java.util.Random().nextInt(4);
+        int pieceType = new java.util.Random().nextInt(5);
         
         if (pieceType == 0) {
             currentPiece = new SquarePiece(this);
@@ -186,7 +187,10 @@ public class Game {
         }
         if(pieceType == 3){
             currentPiece = new TPiece(this);
-        }        
+        }   
+        if(pieceType == 4){
+            currentPiece = new InvLPiece(this);
+        } 
     }
 
     /**

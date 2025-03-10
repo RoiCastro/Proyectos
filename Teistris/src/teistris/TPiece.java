@@ -20,9 +20,42 @@ public class TPiece extends Piece {
 
         squares = new Square[4];
 
-        squares[0] = new Square(Game.MAX_X / 2 - Game.SQUARE_SIDE, 0, Color.RED, game);
-        squares[1] = new Square(Game.MAX_X / 2 - Game.SQUARE_SIDE, Game.SQUARE_SIDE, Color.RED, game);
-        squares[2] = new Square(Game.MAX_X / 2 - Game.SQUARE_SIDE, Game.SQUARE_SIDE * 2, Color.RED, game);
-        squares[3] = new Square(Game.MAX_X / 2, Game.SQUARE_SIDE, Color.RED, game);
+        squares[0] = new Square(Game.MAX_X / 2 - Game.SQUARE_SIDE, 0, Color.MAGENTA, game);
+        squares[1] = new Square(Game.MAX_X / 2 - Game.SQUARE_SIDE, Game.SQUARE_SIDE, Color.MAGENTA, game);
+        squares[2] = new Square(Game.MAX_X / 2 - Game.SQUARE_SIDE, Game.SQUARE_SIDE * 2, Color.MAGENTA, game);
+        squares[3] = new Square(Game.MAX_X / 2, Game.SQUARE_SIDE, Color.MAGENTA, game);
+    }
+    
+    @Override
+    public boolean rotate() {
+        int pivotX = squares[1].getX();
+        int pivotY = squares[1].getY();
+
+        // Intentamos calcular las nuevas posiciones
+        int[][] newPositions = new int[4][2];
+
+        for (int i = 0; i < squares.length; i++) {
+            int relativeX = squares[i].getX() - pivotX;
+            int relativeY = squares[i].getY() - pivotY;
+
+            // Aplicar rotación 90°: (x, y) -> (-y, x)
+            newPositions[i][0] = pivotX - relativeY;
+            newPositions[i][1] = pivotY + relativeX;
+        }
+
+        // Verificamos si la rotación es válida (no colisiona con bordes u otras piezas)
+        for (int i = 0; i < squares.length; i++) {
+            if (!game.isValidPosition(newPositions[i][0], newPositions[i][1])) {
+                return false; // No podemos rotar
+            }
+        }
+
+        // Aplicamos las nuevas posiciones
+        for (int i = 0; i < squares.length; i++) {
+            squares[i].setX(newPositions[i][0]);
+            squares[i].setY(newPositions[i][1]);
+        }
+
+        return true;
     }
 }
