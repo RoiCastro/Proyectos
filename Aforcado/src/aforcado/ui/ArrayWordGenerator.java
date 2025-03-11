@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package aforcado;
+package aforcado.ui;
 
 /**
  *
@@ -29,10 +29,16 @@ public class ArrayWordGenerator implements WordGenerator{
         this.WORDLIST = WORDLIST;
     }
     
-    @Override
-    public String generateWord() throws GenerateWordException{
-        int value = new java.util.Random().nextInt(WORDLIST.length);
-        return WORDLIST[value];
-
+@Override
+public String generateWord() throws GenerateWordException {
+    // Comprobamos se WORDLIST está baleiro
+    if (WORDLIST == null || WORDLIST.length == 0) {
+        throw new GenerateWordException("A lista de palabras está baleira ou non accesible.", true);
     }
+
+    // Se non está baleiro, escoller unha palabra aleatoria
+    int value = new java.util.Random().nextInt(WORDLIST.length);
+    return WORDLIST[value];
+}
+
 }

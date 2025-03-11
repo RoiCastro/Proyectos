@@ -1,11 +1,11 @@
-C:\Users\roica\Documents\NetBeansProjects\tacebook\src\main\java\com\tacebook\model\Comment.java
-C:\Users\roica\Documents\NetBeansProjects\tacebook\src\main\java\com\tacebook\persistencia\ProfileDB.java
-C:\Users\roica\Documents\NetBeansProjects\tacebook\src\main\java\com\tacebook\controller\ProfileController.java
-C:\Users\roica\Documents\NetBeansProjects\tacebook\src\main\java\com\tacebook\persistencia\TacebookDB.java
-C:\Users\roica\Documents\NetBeansProjects\tacebook\src\main\java\com\tacebook\model\Profile.java
-C:\Users\roica\Documents\NetBeansProjects\tacebook\src\main\java\com\tacebook\controller\InitMenuController.java
-C:\Users\roica\Documents\NetBeansProjects\tacebook\src\main\java\com\tacebook\model\Post.java
-C:\Users\roica\Documents\NetBeansProjects\tacebook\src\main\java\com\tacebook\view\InitMenuView.java
-C:\Users\roica\Documents\NetBeansProjects\tacebook\src\main\java\com\tacebook\view\ProfileView.java
-C:\Users\roica\Documents\NetBeansProjects\tacebook\src\main\java\com\tacebook\model\Message.java
-C:\Users\roica\Documents\NetBeansProjects\tacebook\src\main\java\module-info.java
+/home/roi.castrocalvar/Roi Castro/Proyectos/tacebook/src/main/java/com/tacebook/model/Comment.java
+/home/roi.castrocalvar/Roi Castro/Proyectos/tacebook/src/main/java/com/tacebook/model/Post.java
+/home/roi.castrocalvar/Roi Castro/Proyectos/tacebook/src/main/java/com/tacebook/controller/InitMenuController.java
+/home/roi.castrocalvar/Roi Castro/Proyectos/tacebook/src/main/java/com/tacebook/persistencia/ProfileDB.java
+/home/roi.castrocalvar/Roi Castro/Proyectos/tacebook/src/main/java/com/tacebook/persistencia/TacebookDB.java
+/home/roi.castrocalvar/Roi Castro/Proyectos/tacebook/src/main/java/com/tacebook/model/Message.java
+/home/roi.castrocalvar/Roi Castro/Proyectos/tacebook/src/main/java/com/tacebook/view/InitMenuView.java
+/home/roi.castrocalvar/Roi Castro/Proyectos/tacebook/src/main/java/module-info.java
+/home/roi.castrocalvar/Roi Castro/Proyectos/tacebook/src/main/java/com/tacebook/view/ProfileView.java
+/home/roi.castrocalvar/Roi Castro/Proyectos/tacebook/src/main/java/com/tacebook/controller/ProfileController.java
+/home/roi.castrocalvar/Roi Castro/Proyectos/tacebook/src/main/java/com/tacebook/model/Profile.java

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package aforcado;
+package aforcado.model;
 
 import java.util.ArrayList;
 
@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * 
  * @author roi.castrocalvar
  */
-class HangMan {
+public class HangMan {
 
     private static final int MAX_FAILS = 6; // Número máximo de fallos permitidos antes de perder a partida.
     private HiddenWord hiddenWord; // Obxecto que xestiona a palabra oculta a adiviñar.
