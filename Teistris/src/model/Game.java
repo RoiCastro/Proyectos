@@ -14,11 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package teistris;
+package model;
 
 import view.MainWindow;
 import java.util.HashMap;
 import java.util.Map;
+import view.MainWindowA;
 
 /**
  * Clase que implementa o comportamento do xogo do Tetris
@@ -34,11 +35,11 @@ public class Game {
     /**
      * Constante que define o valor máximo da coordenada x no panel de cadrados
      */
-    public final static int MAX_X = 160;
+    public final static int MAX_X = 400;
     /**
      * Constante que define o valor máximo da coordenada y no panel de cadrados
      */
-    public final static int MAX_Y = 200;
+    public final static int MAX_Y = 450;
 
     private Map<String, Square> groundSquares = new HashMap<>();
 
@@ -50,7 +51,7 @@ public class Game {
     /**
      * Referenza á ventá principal do xogo
      */
-    private MainWindow mainWindow;
+    private MainWindowA mainWindowa;
 
     /**
      * Flag que indica se o xogo está en pausa ou non
@@ -65,15 +66,15 @@ public class Game {
     /**
      * @return Referenza á ventá principal do xogo
      */
-    public MainWindow getMainWindow() {
-        return mainWindow;
+    public MainWindowA getMainWindow() {
+        return mainWindowa;
     }
 
     /**
      * @param mainWindow Ventá principal do xogo a establecer
      */
-    public void setMainWindow(MainWindow mainWindow) {
-        this.mainWindow = mainWindow;
+    public void setMainWindowA(MainWindowA mainWindow) {
+        this.mainWindowa = mainWindow;
     }
 
     /**
@@ -109,8 +110,8 @@ public class Game {
      *
      * @param mainWindow Referenza á ventá principal do xogo
      */
-    public Game(MainWindow mainWindow) {
-        this.mainWindow = mainWindow;
+    public Game(MainWindowA mainWindow) {
+        this.mainWindowa = mainWindow;
         this.createNewPiece();
     }
 
@@ -151,7 +152,7 @@ public class Game {
             this.addPieceToGround();
             this.createNewPiece();
             if (this.hitPieceTheGround()) {
-                this.mainWindow.showGameOver();
+                this.mainWindowa.showGameOver();
             }
         }
     }
@@ -222,7 +223,7 @@ public class Game {
             if (isComplete) {
                 deleteLine(i);
                 numberOfLines++;
-                mainWindow.showNumberOfLines(numberOfLines);
+                mainWindowa.showNumberOfLines(numberOfLines);
             }
         }
     }
@@ -238,7 +239,7 @@ public class Game {
         for (int i = 0; i < MAX_X; i += SQUARE_SIDE) {
             Square square = groundSquares.remove(i + "," + y);
             if (square != null) {
-                mainWindow.deleteSquare(square.getLblSquare());
+                mainWindowa.deleteSquare(square.getLblSquare());
             }
         }
         for (int ny = y - SQUARE_SIDE; ny >= 0; ny -= SQUARE_SIDE) {

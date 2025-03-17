@@ -18,7 +18,7 @@ package view;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import teistris.Game;
+import model.Game;
 
 /**
  * Clase que implementa a ventá principal do xogo do Tetris
