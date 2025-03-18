@@ -120,6 +120,9 @@ public abstract class Piece {
         return isValid;
     }
 
+    /**
+     * Move a peza ata os cadrados do chan
+     */
     public void hardDrop() {
         game.hardDropPiece();
     }

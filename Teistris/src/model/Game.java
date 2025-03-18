@@ -244,12 +244,8 @@ public class Game {
 
     /**
      * Se os cadrados que están forman unha liña completa, bórranse eses
-     * cadrados do chan e súmase unha nova liña no número de liñas realizadas
-     */
-    /**
-     * Se os cadrados que están forman unha liña completa, bórranse eses
      * cadrados do chan e súmase unha nova liña no número de liñas realizadas.
-     * Se se completan 5 liñas, engádese unha nova fila de bloques aleatorios.
+     * Se se completan 2 liñas, engádese enbaixo unha nova fila de bloques.
      */
     public void deleteCompletedLines() {
         for (int i = 0; i < MAX_Y; i += SQUARE_SIDE) {
@@ -265,7 +261,7 @@ public class Game {
                 numberOfLines++;
                 mainWindowa.showNumberOfLines(numberOfLines);
 
-                // Cando se completan 5 liñas, engadir fila de bloques aleatorios
+                // Cando se completan 2 liñas, engadir fila de bloques aleatorios
                 if (numberOfLines % 2 == 0) {
                     addRandomRow();
                 }
@@ -358,7 +354,8 @@ public class Game {
      */
     public void addObstacleRow() {
         Random random = new Random();
-        int numBlocks = random.nextInt(MAX_X / SQUARE_SIDE / 2) + 3; // Entre 3 e a metade da fila
+        int numBlocks = random.nextInt(MAX_X / SQUARE_SIDE / 2) + 3;
+        // Numero de bloques entre 3 e un pouco mais da metade da fila
 
         // Comproba se hai bloques na primeira fila -> Game Over
         for (int j = 0; j < MAX_X; j += SQUARE_SIDE) {
