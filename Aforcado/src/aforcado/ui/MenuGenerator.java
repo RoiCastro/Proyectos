@@ -39,44 +39,45 @@ public class MenuGenerator {
      *
      * @return la palabra generada
      */
-private String showInitMenu() {
-    // Muestra mensaje de bienvenida y seleccion del modo de juego
-    System.out.println("Benvido ao Aforcado! ");
-    System.out.println("Seleciona o modo de xogo:");
-    System.out.println("1. Palabra aleatoria");
-    System.out.println("2. Escribir palabra");
-    Scanner scan = new Scanner(System.in);
-    int var = scan.nextInt();
-    scan.nextLine();
-    try {
-        switch (var) {
-            case 1:
-                ArrayWordGenerator wordGenerator1 = new ArrayWordGenerator();
-                // Mensaje de creacion de la palabra
-                System.out.println("Xenerando palabra oculta...");
-                // Se crea una instancia de ArrayWordGenerator para generar una palabra aleatoria
-                return wordGenerator1.generateWord(); // Devuelve la palabra generada
-            case 2:
-                KeyboardWordGenerator wordGenerator2 = new KeyboardWordGenerator();
-                System.out.println("Xenerando palabra oculta...");
-                return wordGenerator2.generateWord(); // Devuelve la palabra generada
+    private String showInitMenu() {
+        // Muestra mensaje de bienvenida y seleccion del modo de juego
+        System.out.println("Benvido ao Aforcado! ");
+        System.out.println("Seleciona o modo de xogo:");
+        System.out.println("1. Palabra aleatoria");
+        System.out.println("2. Escribir palabra");
+        Scanner scan = new Scanner(System.in);
+        int var = scan.nextInt();
+        scan.nextLine();
+        try {
+            switch (var) {
+                case 1:
+                    ArrayWordGenerator wordGenerator1 = new ArrayWordGenerator();
+                    // Mensaje de creacion de la palabra
+                    System.out.println("Xenerando palabra oculta...");
+                    // Se crea una instancia de ArrayWordGenerator para generar una palabra aleatoria
+                    return wordGenerator1.generateWord(); // Devuelve la palabra generada
+                case 2:
+                    KeyboardWordGenerator wordGenerator2 = new KeyboardWordGenerator();
+                    System.out.println("Xenerando palabra oculta...");
+                    return wordGenerator2.generateWord(); // Devuelve la palabra generada
+            }
+        } catch (GenerateWordException e) {
+            // Si la excepción tiene el atributo 'visible' en true, muestra la mensaje
+            if (e.isVisible()) {
+                System.out.println("Erro ao xerar a palabra: " + e.getMessage());
+            }
         }
-    } catch (GenerateWordException e) {
-        // Si la excepción tiene el atributo 'visible' en true, muestra la mensaje
-        if (e.isVisible()) {
-            System.out.println("Erro ao xerar a palabra: " + e.getMessage());
-        }
+        return null;
     }
-    return null;
-}
-        /**
-         * Muestra el menú del juego y gestiona las interacciones del usuario
-         */
+
+    /**
+     * Muestra el menú del juego y gestiona las interacciones del usuario
+     */
     private void showGameMenu() {
         // Se crea un objeto Scanner para leer las entradas del usuario
         Scanner scan = new Scanner(System.in);
         // Bucle principal del juego: se juega hasta que el juego termine
-        while (!hangMan.isGameOver()) {
+        while (!hangMan.isGameOver() && !hangMan.maxFailsExceeded()) {
             // Muestra la palabra oculta (con las letras adivinadas y los guiones)
             System.out.println("Palabra: " + hangMan.showHiddenWord());
             // Muestra el número de fallos realizados
@@ -101,6 +102,7 @@ private String showInitMenu() {
             if (hangMan.isGameOver()) {
                 // Si el juego terminó, muestra mensaje de victoria
                 System.out.println("Ganaste.");
+                System.out.println("A palabra era: " + hangMan.showFullWord());
             }
         }
     }

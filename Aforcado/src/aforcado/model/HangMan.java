@@ -85,13 +85,12 @@ public class HangMan {
     }
 
     /**
-     * Comproba se o xogo rematou, ben porque o usuario acertou toda a palabra 
-     * ou porque chegou ao número máximo de fallos permitidos.
+     * Comproba se o xogo rematou, porque o usuario acertou toda a palabra.
      * 
      * @return true se o xogo rematou, false en caso contrario.
      */
     public boolean isGameOver() {
-        return maxFailsExceeded() || hiddenWord.isVisible();
+        return hiddenWord.isVisible();
     }
 
     /**

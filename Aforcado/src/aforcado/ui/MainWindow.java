@@ -5,6 +5,11 @@
 package aforcado.ui;
 
 import aforcado.model.HangMan;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -13,6 +18,7 @@ import aforcado.model.HangMan;
 public class MainWindow extends javax.swing.JFrame {
 
     private HangMan aforcado;
+
     /**
      * Creates new form MainWindow
      */
@@ -29,33 +35,84 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        ModoDeXogo = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jComboBoxModoDeXogo = new javax.swing.JComboBox<>();
+        SecretWord = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jTextFieldSecretWord = new javax.swing.JTextField();
         Aforcado = new javax.swing.JPanel();
         MenuJuego = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        jButtonProbar = new javax.swing.JButton();
         jLabelFallos = new javax.swing.JLabel();
         jLabelAdivinar = new javax.swing.JLabel();
         Titulo = new javax.swing.JPanel();
         jLabelTitulo = new javax.swing.JLabel();
         Menu = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        jButtonSair = new javax.swing.JButton();
+        jButtonNovaPartida = new javax.swing.JButton();
+
+        jLabel1.setText("Selecciona un modo de xogo");
+
+        jComboBoxModoDeXogo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Un xogador xerando a palabra ao azar", "Dous xogadores escribindo a palabra" }));
+        jComboBoxModoDeXogo.setToolTipText("");
+
+        javax.swing.GroupLayout ModoDeXogoLayout = new javax.swing.GroupLayout(ModoDeXogo);
+        ModoDeXogo.setLayout(ModoDeXogoLayout);
+        ModoDeXogoLayout.setHorizontalGroup(
+            ModoDeXogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ModoDeXogoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(ModoDeXogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jComboBoxModoDeXogo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        ModoDeXogoLayout.setVerticalGroup(
+            ModoDeXogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ModoDeXogoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBoxModoDeXogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jLabel5.setText("Introduce la palabra secreta :");
+
+        javax.swing.GroupLayout SecretWordLayout = new javax.swing.GroupLayout(SecretWord);
+        SecretWord.setLayout(SecretWordLayout);
+        SecretWordLayout.setHorizontalGroup(
+            SecretWordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SecretWordLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldSecretWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        SecretWordLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel5, jTextFieldSecretWord});
+
+        SecretWordLayout.setVerticalGroup(
+            SecretWordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SecretWordLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(SecretWordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jTextFieldSecretWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        SecretWordLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel5, jTextFieldSecretWord});
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.GroupLayout AforcadoLayout = new javax.swing.GroupLayout(Aforcado);
-        Aforcado.setLayout(AforcadoLayout);
-        AforcadoLayout.setHorizontalGroup(
-            AforcadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 205, Short.MAX_VALUE)
-        );
-        AforcadoLayout.setVerticalGroup(
-            AforcadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 285, Short.MAX_VALUE)
-        );
+        Aforcado.setLayout(new java.awt.CardLayout());
 
         MenuJuego.setMinimumSize(new java.awt.Dimension(100, 100));
         MenuJuego.setName(""); // NOI18N
@@ -66,12 +123,22 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel4.setText("Introduce unha letra:");
 
-        jButton3.setText("Probar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+        jTextField1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextField1FocusGained(evt);
             }
         });
+
+        jButtonProbar.setText("Probar");
+        jButtonProbar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonProbarActionPerformed(evt);
+            }
+        });
+
+        jLabelFallos.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+
+        jLabelAdivinar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
 
         javax.swing.GroupLayout MenuJuegoLayout = new javax.swing.GroupLayout(MenuJuego);
         MenuJuego.setLayout(MenuJuegoLayout);
@@ -95,12 +162,12 @@ public class MainWindow extends javax.swing.JFrame {
                     .addGroup(MenuJuegoLayout.createSequentialGroup()
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3))
+                        .addComponent(jButtonProbar))
                     .addComponent(jLabelAdivinar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
-        MenuJuegoLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton3, jTextField1});
+        MenuJuegoLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButtonProbar, jTextField1});
 
         MenuJuegoLayout.setVerticalGroup(
             MenuJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -117,11 +184,11 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(MenuJuegoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(jButton3))
+                    .addComponent(jButtonProbar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        MenuJuegoLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton3, jLabel2, jLabel3, jLabel4, jLabelAdivinar, jLabelFallos, jTextField1});
+        MenuJuegoLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButtonProbar, jLabel2, jLabel3, jLabel4, jLabelAdivinar, jLabelFallos, jTextField1});
 
         jLabelFallos.getAccessibleContext().setAccessibleName("jLabel6");
 
@@ -145,18 +212,18 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jButton2.setText("Saír");
-        jButton2.setToolTipText("");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButtonSair.setText("Saír");
+        jButtonSair.setToolTipText("");
+        jButtonSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButtonSairActionPerformed(evt);
             }
         });
 
-        jButton1.setText("Nova partida");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonNovaPartida.setText("Nova partida");
+        jButtonNovaPartida.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonNovaPartidaActionPerformed(evt);
             }
         });
 
@@ -166,9 +233,9 @@ public class MainWindow extends javax.swing.JFrame {
             MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MenuLayout.createSequentialGroup()
                 .addGap(29, 29, 29)
-                .addComponent(jButton1)
+                .addComponent(jButtonNovaPartida)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(jButtonSair)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         MenuLayout.setVerticalGroup(
@@ -176,8 +243,8 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButtonNovaPartida)
+                    .addComponent(jButtonSair))
                 .addContainerGap())
         );
 
@@ -207,12 +274,12 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
-                        .addComponent(MenuJuego, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 130, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addComponent(Aforcado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 192, Short.MAX_VALUE)
+                        .addComponent(MenuJuego, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(Menu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -221,35 +288,70 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void jButtonProbarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonProbarActionPerformed
+        tryChar();
+        showGameStatus();
+    }//GEN-LAST:event_jButtonProbarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonNovaPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovaPartidaActionPerformed
         startNewGame();
-    }//GEN-LAST:event_jButton1ActionPerformed
+        jButtonProbar.setEnabled(true);
+        jLabelFallos.setText("");
+    }//GEN-LAST:event_jButtonNovaPartidaActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
+    private void jButtonSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSairActionPerformed
+        //Para la ejecucion
         System.exit(0);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButtonSairActionPerformed
 
-    private void startNewGame(){
+    private void jTextField1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusGained
+        //Cada vez que obtenga el focus borra el contenido
+        jTextField1.setText("");
+    }//GEN-LAST:event_jTextField1FocusGained
+
+    private void startNewGame() {
+        JOptionPane.showConfirmDialog(this, ModoDeXogo, "Menú de xogo", JOptionPane.CANCEL_OPTION);
+        int index = jComboBoxModoDeXogo.getSelectedIndex();
         try {
-            ArrayWordGenerator word = new ArrayWordGenerator();
-            String palabra= word.generateWord();
-            aforcado = new HangMan(palabra);
-            jLabelAdivinar.setText(aforcado.showHiddenWord());
+            switch (index) {
+                case 0 -> {
+                    ArrayWordGenerator wordAleatory = new ArrayWordGenerator();
+                    String palabra = wordAleatory.generateWord();
+                    aforcado = new HangMan(palabra);
+                    jLabelAdivinar.setText(aforcado.showHiddenWord());
+                }
+                case 1 -> {
+                    jTextFieldSecretWord.setText("");
+                    JOptionPane.showConfirmDialog(this, SecretWord, "Palabra secreta", JOptionPane.CANCEL_OPTION);
+                    aforcado = new HangMan(jTextFieldSecretWord.getText());
+                    jLabelAdivinar.setText(aforcado.showHiddenWord());
+                }
+                default ->
+                    throw new AssertionError();
+            }
+
         } catch (GenerateWordException e) {
-            
+
         }
     }
-    private void showGameStatus(){
-        
+
+    private void showGameStatus() {
+        jLabelAdivinar.setText(aforcado.showHiddenWord());
+        jLabelFallos.setText(aforcado.getStringFails());
+        if (aforcado.isGameOver()) {
+            JOptionPane.showMessageDialog(this, "Gañaches parabens", "Fin do xogo", JOptionPane.INFORMATION_MESSAGE);
+            jButtonProbar.setEnabled(false);
+        }
+        if (aforcado.maxFailsExceeded()) {
+            JOptionPane.showMessageDialog(this, "Fin do xogo. A palabra oculta era " + aforcado.showFullWord(), "Game Over", JOptionPane.INFORMATION_MESSAGE);
+            jButtonProbar.setEnabled(false);
+        }
     }
-    private void tryChar(){
-        
+
+    private void tryChar() {
+        aforcado.tryChar(jTextField1.getText().toLowerCase().charAt(0));
     }
+
     /**
      * @param args the command line arguments
      */
@@ -289,16 +391,22 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel Aforcado;
     private javax.swing.JPanel Menu;
     private javax.swing.JPanel MenuJuego;
+    private javax.swing.JPanel ModoDeXogo;
+    private javax.swing.JPanel SecretWord;
     private javax.swing.JPanel Titulo;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButtonNovaPartida;
+    private javax.swing.JButton jButtonProbar;
+    private javax.swing.JButton jButtonSair;
+    private javax.swing.JComboBox<String> jComboBoxModoDeXogo;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelAdivinar;
     private javax.swing.JLabel jLabelFallos;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextFieldSecretWord;
     // End of variables declaration//GEN-END:variables
 }

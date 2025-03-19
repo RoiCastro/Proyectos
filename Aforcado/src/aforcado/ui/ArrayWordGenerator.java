@@ -10,7 +10,7 @@ package aforcado.ui;
  */
 public class ArrayWordGenerator implements WordGenerator{
 
-    private String[] WORDLIST = {"Casa", "Perro", "Jardín", "Escuela", "Manzana", "Mariposa", "Sol", "Río", "Montaña", "Playa", "Coche", "Guitarra", "Biblioteca", "Castillo", "Luna", "Nieve", "Reloj", "Estrella", "Bosque", "Tren"};
+    private String[] WORDLIST = {"Casa", "Perro", "Jardin", "Escuela", "Manzana", "Mariposa", "Sol", "Rio", "Montaña", "Playa", "Coche", "Guitarra", "Biblioteca", "Castillo", "Luna", "Nieve", "Reloj", "Estrella", "Bosque", "Tren"};
 
     /**
      * Consigue el arreglo de la visibilidad
