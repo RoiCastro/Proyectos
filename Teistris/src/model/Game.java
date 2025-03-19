@@ -16,9 +16,10 @@
  */
 package model;
 
-import view.MainWindow;
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import view.MainWindowA;
 
 /**
@@ -39,7 +40,7 @@ public class Game {
     /**
      * Constante que define o valor máximo da coordenada y no panel de cadrados
      */
-    public final static int MAX_Y = 450;
+    public final static int MAX_Y = 460;
 
     private Map<String, Square> groundSquares = new HashMap<>();
 
@@ -63,6 +64,8 @@ public class Game {
      */
     private int numberOfLines = 0;
 
+    private int level = 1; // Nivel inicial do xogo
+
     /**
      * @return Referenza á ventá principal do xogo
      */
@@ -75,6 +78,24 @@ public class Game {
      */
     public void setMainWindowA(MainWindowA mainWindow) {
         this.mainWindowa = mainWindow;
+    }
+
+    /**
+     * Consigue o valor para o nivel
+     *
+     * @return o valor do nivel
+     */
+    public int getLevel() {
+        return level;
+    }
+
+    /**
+     * Cambia o valor para o nivel
+     *
+     * @param level valor do nivel
+     */
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     /**
@@ -158,6 +179,20 @@ public class Game {
     }
 
     /**
+     * move a peza actual ata a ultima posicion valida
+     */
+    public void hardDropPiece() {
+        while (currentPiece.moveDown()) {
+
+        }
+        addPieceToGround();
+        createNewPiece();
+        if (hitPieceTheGround()) {
+            mainWindowa.showGameOver();
+        }
+    }
+
+    /**
      * Método que permite saber se unha posición x,y é válida para un cadrado
      *
      * @param x Coordenada x
@@ -174,30 +209,30 @@ public class Game {
     /**
      * Crea unha nova peza e a establece como peza actual do xogo
      */
-    private void createNewPiece() {
+    public void createNewPiece() {
         int pieceType = new java.util.Random().nextInt(5);
-        
+
         if (pieceType == 0) {
             currentPiece = new SquarePiece(this);
-        } 
-        if(pieceType == 1){
+        }
+        if (pieceType == 1) {
             currentPiece = new LPiece(this);
         }
-        if(pieceType == 2){
+        if (pieceType == 2) {
             currentPiece = new BarPiece(this);
         }
-        if(pieceType == 3){
+        if (pieceType == 3) {
             currentPiece = new TPiece(this);
-        }   
-        if(pieceType == 4){
+        }
+        if (pieceType == 4) {
             currentPiece = new InvLPiece(this);
-        } 
+        }
     }
 
     /**
      * Engade unha peza ao chan
      */
-    private void addPieceToGround() {
+    public void addPieceToGround() {
         // Engadimos os cadrados da peza ao chan
         for (Square square : currentPiece.getSquares()) {
             groundSquares.put(square.getCoordinates(), square);
@@ -209,9 +244,10 @@ public class Game {
 
     /**
      * Se os cadrados que están forman unha liña completa, bórranse eses
-     * cadrados do chan e súmase unha nova liña no número de liñas realizadas
+     * cadrados do chan e súmase unha nova liña no número de liñas realizadas.
+     * Se se completan 2 liñas, engádese enbaixo unha nova fila de bloques.
      */
-    private void deleteCompletedLines() {
+    public void deleteCompletedLines() {
         for (int i = 0; i < MAX_Y; i += SQUARE_SIDE) {
             boolean isComplete = true;
             for (int j = 0; j < MAX_X; j += SQUARE_SIDE) {
@@ -224,8 +260,53 @@ public class Game {
                 deleteLine(i);
                 numberOfLines++;
                 mainWindowa.showNumberOfLines(numberOfLines);
+
+                // Cando se completan 2 liñas, engadir fila de bloques aleatorios
+                if (numberOfLines % 2 == 0) {
+                    addRandomRow();
+                }
             }
         }
+    }
+
+    /**
+     * Engade unha nova fila de bloques aleatorios no chan e sobe todos os
+     * bloques existentes.
+     */
+    public void addRandomRow() {
+        // Desprazar todas as filas cara arriba
+        HashMap<String, Square> newGround = new HashMap<>();
+        for (Square square : groundSquares.values()) {
+            int newY = square.getY() - SQUARE_SIDE;
+            if (newY >= 0) { // Só gardamos os bloques que aínda están na pantalla
+                square.setY(newY);
+                newGround.put(square.getCoordinates(), square);
+            }
+        }
+        groundSquares = newGround; // Actualizamos a estrutura de datos
+
+        // Crear a nova fila de bloques grises na parte inferior
+        java.util.Random rand = new java.util.Random();
+        boolean[] occupied = new boolean[MAX_X / SQUARE_SIDE];
+
+        int count = 0;
+        while (count < 17) {
+            int index = rand.nextInt(MAX_X / SQUARE_SIDE);
+
+            if (!occupied[index]) {
+                int x = index * SQUARE_SIDE;
+                int y = MAX_Y - SQUARE_SIDE; // Agora asegúrase de que se engaden abaixo
+
+                Square newBlock = new Square(x, y, Color.GRAY, this);
+                groundSquares.put(newBlock.getCoordinates(), newBlock);
+                occupied[index] = true;
+                count++;
+            }
+        }
+
+        // Actualizar o nivel
+        level = (numberOfLines / 2) + 1;
+        mainWindowa.showLevel(level);
     }
 
     /**
@@ -235,7 +316,7 @@ public class Game {
      *
      * @param y Coordenada y da liña a borrar
      */
-    private void deleteLine(int y) {
+    public void deleteLine(int y) {
         for (int i = 0; i < MAX_X; i += SQUARE_SIDE) {
             Square square = groundSquares.remove(i + "," + y);
             if (square != null) {
@@ -258,12 +339,54 @@ public class Game {
      *
      * @return true se a peza actual choca cos cadrados do chan; se non false
      */
-    private boolean hitPieceTheGround() {
+    public boolean hitPieceTheGround() {
         for (Square square : currentPiece.getSquares()) {
             if (groundSquares.containsKey(square.getCoordinates())) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Engade unha fila de obstáculos ao chan e despraza as filas existentes
+     * cara arriba.
+     */
+    public void addObstacleRow() {
+        Random random = new Random();
+        int numBlocks = random.nextInt(MAX_X / SQUARE_SIDE / 2) + 3;
+        // Numero de bloques entre 3 e un pouco mais da metade da fila
+
+        // Comproba se hai bloques na primeira fila -> Game Over
+        for (int j = 0; j < MAX_X; j += SQUARE_SIDE) {
+            if (groundSquares.containsKey(j + ",0")) {
+                mainWindowa.showGameOver();
+                return;
+            }
+        }
+
+        // Sube todas as filas un nivel
+        for (int y = 0; y < MAX_Y - SQUARE_SIDE; y += SQUARE_SIDE) {
+            for (int x = 0; x < MAX_X; x += SQUARE_SIDE) {
+                Square square = groundSquares.remove(x + "," + (y + SQUARE_SIDE));
+                if (square != null) {
+                    square.setY(y);
+                    groundSquares.put(square.getCoordinates(), square);
+                }
+            }
+        }
+
+        // Engade novos bloques en posicións aleatorias na última fila
+        for (int i = 0; i < numBlocks; i++) {
+            int x = random.nextInt(MAX_X / SQUARE_SIDE) * SQUARE_SIDE;
+            if (!groundSquares.containsKey(x + "," + (MAX_Y - SQUARE_SIDE))) {
+                Square newBlock = new Square(x, MAX_Y - SQUARE_SIDE, Color.GRAY, this);
+                groundSquares.put(newBlock.getCoordinates(), newBlock);
+                mainWindowa.drawSquare(newBlock.getLblSquare());
+            }
+        }
+
+        // Actualiza a interface
+        mainWindowa.repaint();
     }
 }
