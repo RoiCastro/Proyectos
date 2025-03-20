@@ -5,10 +5,7 @@
 package aforcado.ui;
 
 import aforcado.model.HangMan;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,13 +14,15 @@ import javax.swing.JOptionPane;
  */
 public class MainWindow extends javax.swing.JFrame {
 
-    private HangMan aforcado;
+    private HangMan hangman;
+    private JLabel[] monicreque;
 
     /**
      * Creates new form MainWindow
      */
     public MainWindow() {
         initComponents();
+        monicreque= new JLabel[] {Hangman0,Hangman1,Hangman2,Hangman3,Hangman4,Hangman5,Hangman6};
     }
 
     /**
@@ -42,6 +41,13 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jTextFieldSecretWord = new javax.swing.JTextField();
         Aforcado = new javax.swing.JPanel();
+        Hangman0 = new javax.swing.JLabel();
+        Hangman1 = new javax.swing.JLabel();
+        Hangman2 = new javax.swing.JLabel();
+        Hangman3 = new javax.swing.JLabel();
+        Hangman4 = new javax.swing.JLabel();
+        Hangman5 = new javax.swing.JLabel();
+        Hangman6 = new javax.swing.JLabel();
         MenuJuego = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -113,6 +119,27 @@ public class MainWindow extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         Aforcado.setLayout(new java.awt.CardLayout());
+
+        Hangman0.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Hangman-0.png"))); // NOI18N
+        Aforcado.add(Hangman0, "card8");
+
+        Hangman1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Hangman-1.png"))); // NOI18N
+        Aforcado.add(Hangman1, "card2");
+
+        Hangman2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Hangman-2.png"))); // NOI18N
+        Aforcado.add(Hangman2, "card3");
+
+        Hangman3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Hangman-3.png"))); // NOI18N
+        Aforcado.add(Hangman3, "card4");
+
+        Hangman4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Hangman-4.png"))); // NOI18N
+        Aforcado.add(Hangman4, "card5");
+
+        Hangman5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Hangman-5.png"))); // NOI18N
+        Aforcado.add(Hangman5, "card6");
+
+        Hangman6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Hangman-6.png"))); // NOI18N
+        Aforcado.add(Hangman6, "card7");
 
         MenuJuego.setMinimumSize(new java.awt.Dimension(100, 100));
         MenuJuego.setName(""); // NOI18N
@@ -257,30 +284,26 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(MenuJuego, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 278, Short.MAX_VALUE)
                         .addComponent(Aforcado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 361, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(Titulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(Menu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap(304, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(Aforcado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 192, Short.MAX_VALUE)
-                        .addComponent(MenuJuego, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(MenuJuego, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Aforcado, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(Menu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -317,14 +340,14 @@ public class MainWindow extends javax.swing.JFrame {
                 case 0 -> {
                     ArrayWordGenerator wordAleatory = new ArrayWordGenerator();
                     String palabra = wordAleatory.generateWord();
-                    aforcado = new HangMan(palabra);
-                    jLabelAdivinar.setText(aforcado.showHiddenWord());
+                    hangman = new HangMan(palabra);
+                    jLabelAdivinar.setText(hangman.showHiddenWord());
                 }
                 case 1 -> {
                     jTextFieldSecretWord.setText("");
                     JOptionPane.showConfirmDialog(this, SecretWord, "Palabra secreta", JOptionPane.CANCEL_OPTION);
-                    aforcado = new HangMan(jTextFieldSecretWord.getText());
-                    jLabelAdivinar.setText(aforcado.showHiddenWord());
+                    hangman = new HangMan(jTextFieldSecretWord.getText());
+                    jLabelAdivinar.setText(hangman.showHiddenWord());
                 }
                 default ->
                     throw new AssertionError();
@@ -336,20 +359,21 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     private void showGameStatus() {
-        jLabelAdivinar.setText(aforcado.showHiddenWord());
-        jLabelFallos.setText(aforcado.getStringFails());
-        if (aforcado.isGameOver()) {
+        jLabelAdivinar.setText(hangman.showHiddenWord());
+        jLabelFallos.setText(hangman.getStringFails());
+        if (hangman.isGameOver()) {
             JOptionPane.showMessageDialog(this, "Gañaches parabens", "Fin do xogo", JOptionPane.INFORMATION_MESSAGE);
             jButtonProbar.setEnabled(false);
         }
-        if (aforcado.maxFailsExceeded()) {
-            JOptionPane.showMessageDialog(this, "Fin do xogo. A palabra oculta era " + aforcado.showFullWord(), "Game Over", JOptionPane.INFORMATION_MESSAGE);
+        if (hangman.maxFailsExceeded()) {
+            JOptionPane.showMessageDialog(this, "Fin do xogo. A palabra oculta era " + hangman.showFullWord(), "Game Over", JOptionPane.INFORMATION_MESSAGE);
             jButtonProbar.setEnabled(false);
         }
     }
 
     private void tryChar() {
-        aforcado.tryChar(jTextField1.getText().toLowerCase().charAt(0));
+        hangman.tryChar(jTextField1.getText().toLowerCase().charAt(0));
+        monicreque[hangman.getFails().size()].setVisible(true);
     }
 
     /**
@@ -389,6 +413,13 @@ public class MainWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Aforcado;
+    private javax.swing.JLabel Hangman0;
+    private javax.swing.JLabel Hangman1;
+    private javax.swing.JLabel Hangman2;
+    private javax.swing.JLabel Hangman3;
+    private javax.swing.JLabel Hangman4;
+    private javax.swing.JLabel Hangman5;
+    private javax.swing.JLabel Hangman6;
     private javax.swing.JPanel Menu;
     private javax.swing.JPanel MenuJuego;
     private javax.swing.JPanel ModoDeXogo;
