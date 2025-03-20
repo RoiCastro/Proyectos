@@ -4,6 +4,7 @@
  */
 package com.tacebook.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -82,5 +83,25 @@ public class Comment {
         this.date = date;
         this.text = text;
     }
+    
+     // De aqui para abajo no estoy seguro de lo que hago
+    private ArrayList<Post> posts;
+    private ArrayList<Profile> sourceProfile;
 
+    public ArrayList<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(ArrayList<Post> posts) {
+        this.posts = posts;
+    }
+
+    public ArrayList<Profile> getSourceProfile() {
+        return sourceProfile;
+    }
+
+    public void setSourceProfile(ArrayList<Profile> sourceProfile) {
+        this.sourceProfile = sourceProfile;
+    }
+    
 }

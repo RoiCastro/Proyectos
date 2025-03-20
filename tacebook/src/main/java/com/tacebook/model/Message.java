@@ -4,6 +4,7 @@
  */
 package com.tacebook.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -106,4 +107,25 @@ public class Message {
         this.date = date;
         this.read = read;
     }
+    
+    // De aqui para abajo no estoy seguro de lo que hago
+    private ArrayList<Profile> destProfiles;
+    private ArrayList<Profile> sourceProfile;
+
+    public ArrayList<Profile> getDestProfiles() {
+        return destProfiles;
+    }
+
+    public void setDestProfiles(ArrayList<Profile> destProfiles) {
+        this.destProfiles = destProfiles;
+    }
+
+    public ArrayList<Profile> getSourceProfile() {
+        return sourceProfile;
+    }
+
+    public void setSourceProfile(ArrayList<Profile> sourceProfile) {
+        this.sourceProfile = sourceProfile;
+    }
+    
 }

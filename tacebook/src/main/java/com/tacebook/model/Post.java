@@ -4,6 +4,7 @@
  */
 package com.tacebook.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -83,4 +84,41 @@ public class Post {
         this.text = text;
     }
 
+    // De aqui para abajo no estoy seguro de lo que hago
+    private Profile profile;
+    private Profile author;
+    private ArrayList<Profile> profileLikes;
+    private ArrayList<Comment> comments;
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+
+    public Profile getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Profile author) {
+        this.author = author;
+    }
+
+    public ArrayList<Profile> getProfileLikes() {
+        return profileLikes;
+    }
+
+    public void setProfileLikes(ArrayList<Profile> profileLikes) {
+        this.profileLikes = profileLikes;
+    }
+
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
+    }
 }
