@@ -5,7 +5,7 @@
 package com.tacebook.persistencia;
 
 import com.tacebook.model.Profile;
-import java.util.Scanner;
+
 
 /**
  *
@@ -28,6 +28,7 @@ public class ProfileDB {
             if (TacebookDB.profiles.get(i).getName().equals(name)
                     && TacebookDB.profiles.get(i).getPosts().size() == numberOfPosts) {
                 profile = TacebookDB.profiles.get(i);
+                break;
             }
         }
         return profile;
