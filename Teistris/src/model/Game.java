@@ -261,8 +261,8 @@ public class Game {
                 numberOfLines++;
                 mainWindowa.showNumberOfLines(numberOfLines);
 
-                // Cando se completan 2 liñas, engadir fila de bloques aleatorios
-                if (numberOfLines % 2 == 0) {
+                // Cando se completan 3 liñas, engadir fila de bloques aleatorios
+                if (numberOfLines % 3 == 0) {
                     addRandomRow();
                 }
             }
@@ -274,38 +274,45 @@ public class Game {
      * bloques existentes.
      */
     public void addRandomRow() {
-        // Desprazar todas as filas cara arriba
+        // Desplazar todas las filas hacia arriba
         HashMap<String, Square> newGround = new HashMap<>();
         for (Square square : groundSquares.values()) {
             int newY = square.getY() - SQUARE_SIDE;
-            if (newY >= 0) { // Só gardamos os bloques que aínda están na pantalla
+            if (newY >= 0) {
                 square.setY(newY);
                 newGround.put(square.getCoordinates(), square);
             }
         }
-        groundSquares = newGround; // Actualizamos a estrutura de datos
+        groundSquares = newGround;
 
-        // Crear a nova fila de bloques grises na parte inferior
-        java.util.Random rand = new java.util.Random();
+        // Crear una nueva fila con 19 bloques bien distribuidos
+        Random rand = new Random();
         boolean[] occupied = new boolean[MAX_X / SQUARE_SIDE];
+        int totalBlocks = 19;
 
-        int count = 0;
-        while (count < 17) {
-            int index = rand.nextInt(MAX_X / SQUARE_SIDE);
-
-            if (!occupied[index]) {
-                int x = index * SQUARE_SIDE;
-                int y = MAX_Y - SQUARE_SIDE; // Agora asegúrase de que se engaden abaixo
-
-                Square newBlock = new Square(x, y, Color.GRAY, this);
-                groundSquares.put(newBlock.getCoordinates(), newBlock);
-                occupied[index] = true;
-                count++;
+        // Llenar la fila con al menos un bloque cada 2 espacios
+        int step = (MAX_X / SQUARE_SIDE) / totalBlocks;
+        int position = 0;
+        for (int i = 0; i < totalBlocks; i++) {
+            occupied[position] = true;
+            position += step;
+            if (position >= occupied.length) {
+                position = rand.nextInt(occupied.length);
             }
         }
 
-        // Actualizar o nivel
-        level = (numberOfLines / 2) + 1;
+        // Crear los bloques en sus posiciones
+        for (int i = 0; i < occupied.length; i++) {
+            if (occupied[i]) {
+                int x = i * SQUARE_SIDE;
+                int y = MAX_Y - SQUARE_SIDE; // Posición más baja
+                Square newBlock = new Square(x, y, Color.GRAY, this);
+                groundSquares.put(newBlock.getCoordinates(), newBlock);
+            }
+        }
+
+        // Actualizar nivel
+        level = (numberOfLines / 3) + 1;
         mainWindowa.showLevel(level);
     }
 

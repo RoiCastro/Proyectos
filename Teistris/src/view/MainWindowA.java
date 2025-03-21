@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import model.Game;
+import model.SoundManager;
 
 /**
  *
@@ -30,6 +31,7 @@ public class MainWindowA extends javax.swing.JFrame {
     private static final int OBSTACLE_INTERVAL = 5000; // Intervalo en milisegundos para engadir obstáculos (5 segundos)
 
     private Game game = null; // Referenza ao obxecto do xogo actual
+    private SoundManager soundManager = new SoundManager(); // Instancia para manejar el sonido
 
     /**
      * Creates new form MainWindowA
@@ -80,6 +82,8 @@ public class MainWindowA extends javax.swing.JFrame {
 
         // Inicializamos o temporizador
         startTimer();
+        
+        soundManager.playBackgroundMusic("src/assets/tetris_music.wav"); // Iniciar la música
 
         //subir filas enbaixo para dificultar a partida
         if (game.getLevel() >= LEVEL_THRESHOLD) {
@@ -183,6 +187,7 @@ public class MainWindowA extends javax.swing.JFrame {
             obstacleTimer.stop();
         }
         game = null;
+        soundManager.stopMusic(); // Detener la música cuando termina el juego
         JOptionPane.showMessageDialog(this, "Fin do xogo, fixeche " + lblNumberOfLines.getText() + " linea(s)");
     }
 
