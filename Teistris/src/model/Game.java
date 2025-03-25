@@ -285,19 +285,19 @@ public class Game {
         }
         groundSquares = newGround;
 
-        // Crear una nueva fila con 19 bloques bien distribuidos
-        Random rand = new Random();
+        // Crear una nueva fila con 19 bloques
+        Random random = new Random();
         boolean[] occupied = new boolean[MAX_X / SQUARE_SIDE];
         int totalBlocks = 19;
 
-        // Llenar la fila con al menos un bloque cada 2 espacios
+        
         int step = (MAX_X / SQUARE_SIDE) / totalBlocks;
         int position = 0;
         for (int i = 0; i < totalBlocks; i++) {
             occupied[position] = true;
             position += step;
             if (position >= occupied.length) {
-                position = rand.nextInt(occupied.length);
+                position = random.nextInt(occupied.length);
             }
         }
 
@@ -364,7 +364,7 @@ public class Game {
         int numBlocks = random.nextInt(MAX_X / SQUARE_SIDE / 2) + 3;
         // Numero de bloques entre 3 e un pouco mais da metade da fila
 
-        // Comproba se hai bloques na primeira fila -> Game Over
+        
         for (int j = 0; j < MAX_X; j += SQUARE_SIDE) {
             if (groundSquares.containsKey(j + ",0")) {
                 mainWindowa.showGameOver();

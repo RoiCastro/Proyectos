@@ -23,6 +23,7 @@ public class SoundManager {
     public void playBackgroundMusic(String filepath) {
         try {
             File file = new File("src/assets/tetris_music.wav");
+            // audio funcional para el programa en desarrollo
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
             clip = AudioSystem.getClip();
             clip.open(audioStream);
