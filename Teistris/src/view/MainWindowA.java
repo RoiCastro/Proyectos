@@ -21,7 +21,7 @@ import model.SoundManager;
  */
 public class MainWindowA extends javax.swing.JFrame {
 
-    private Timer timer;
+    private Timer timer; //timer para a baixada das pezas
     private Timer obstacleTimer; //timer para engadir filas ao final
     private int currentInterval = 1000; // Intervalo inicial de 1 segundo
     private static final int LINES_TO_SPEED_UP = 10; // Liñas necesarias para reducir á metade o intervalo
@@ -31,7 +31,7 @@ public class MainWindowA extends javax.swing.JFrame {
     private static final int OBSTACLE_INTERVAL = 5000; // Intervalo en milisegundos para engadir obstáculos (5 segundos)
 
     private Game game = null; // Referenza ao obxecto do xogo actual
-    private SoundManager soundManager = new SoundManager(); // Instancia para manejar el sonido
+    private SoundManager soundManager = new SoundManager(); // Referencia ao manager do son
 
     /**
      * Creates new form MainWindowA
@@ -39,7 +39,7 @@ public class MainWindowA extends javax.swing.JFrame {
     public MainWindowA() {
         initComponents();
 
-        // Configurar KeyEventDispatcher para capturar teclas globalmente
+        // Capturar as teclas globalmente
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         manager.addKeyEventDispatcher(new KeyDispatcher());
     }
@@ -225,6 +225,7 @@ public class MainWindowA extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
+        pnlGame.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         pnlGame.setPreferredSize(new java.awt.Dimension(400, 460));
 
         javax.swing.GroupLayout pnlGameLayout = new javax.swing.GroupLayout(pnlGame);
@@ -271,7 +272,7 @@ public class MainWindowA extends javax.swing.JFrame {
 
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("<html>Si encuentra algun bug<br>o cualquier tipo de error,<br>por favor, no lo notifique.<br><br>Muchas Gracias.</html>");
-        jLabel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Aviso!", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+        jLabel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Aviso!", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Liberation Sans", 0, 13), new java.awt.Color(0, 0, 0))); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -282,7 +283,7 @@ public class MainWindowA extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addComponent(btnNewGame, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
