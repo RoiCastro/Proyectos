@@ -55,4 +55,9 @@ public class InitMenuView {
         }
 
     }
+    public String showNewNameMenu(){
+        System.out.println("O nome xa esta en uso");
+        System.out.println("Escribe un novo nome:");
+        return scan.nextLine();
+    }
 }
