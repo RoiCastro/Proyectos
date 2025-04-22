@@ -335,7 +335,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void startNewGame() {
         JOptionPane.showConfirmDialog(this, ModoDeXogo, "Menú de xogo", JOptionPane.CANCEL_OPTION);
         int index = jComboBoxModoDeXogo.getSelectedIndex();
-        for (JLabel jLabel : monicreque) {
+        for (JLabel jLabel : monicreque) { //restablece las imagenes a la posicion inicial
             jLabel.setVisible(false);
         }
         try {

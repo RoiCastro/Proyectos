@@ -169,12 +169,8 @@ public class Game {
      * peza
      */
     public void movePieceDown() {
-        if ((!paused) && (!currentPiece.moveDown())) {
-            this.addPieceToGround();
-            this.createNewPiece();
-            if (this.hitPieceTheGround()) {
-                this.mainWindowa.showGameOver();
-            }
+        if (!paused) {
+            moveDown();
         }
     }
 
@@ -182,14 +178,20 @@ public class Game {
      * move a peza actual ata a ultima posicion valida
      */
     public void hardDropPiece() {
-        while (currentPiece.moveDown()) {
-
+        while (moveDown()) {
         }
-        addPieceToGround();
-        createNewPiece();
-        if (hitPieceTheGround()) {
-            mainWindowa.showGameOver();
+    }
+    
+    private boolean moveDown() {
+        boolean canMove = currentPiece.moveDown();
+        if (!canMove) {
+            addPieceToGround();
+            createNewPiece();
+            if (hitPieceTheGround()) {
+                mainWindowa.showGameOver();
+            }
         }
+        return canMove;
     }
 
     /**
@@ -247,7 +249,7 @@ public class Game {
      * cadrados do chan e súmase unha nova liña no número de liñas realizadas.
      * Se se completan 2 liñas, engádese enbaixo unha nova fila de bloques.
      */
-    public void deleteCompletedLines() {
+    private void deleteCompletedLines() {
         for (int i = 0; i < MAX_Y; i += SQUARE_SIDE) {
             boolean isComplete = true;
             for (int j = 0; j < MAX_X; j += SQUARE_SIDE) {
@@ -261,8 +263,8 @@ public class Game {
                 numberOfLines++;
                 mainWindowa.showNumberOfLines(numberOfLines);
 
-                // Cando se completan 3 liñas, engadir fila de bloques aleatorios
-                if (numberOfLines % 3 == 0) {
+                // Cando se completan 3 liñas, engadir fila de bloques
+                if (numberOfLines % 1 == 0) {
                     addRandomRow();
                 }
             }
@@ -273,7 +275,7 @@ public class Game {
      * Engade unha nova fila de bloques aleatorios no chan e sobe todos os
      * bloques existentes.
      */
-    public void addRandomRow() {
+    private void addRandomRow() {
         // Desplazar todas las filas hacia arriba
         HashMap<String, Square> newGround = new HashMap<>();
         for (Square square : groundSquares.values()) {
@@ -286,29 +288,29 @@ public class Game {
         groundSquares = newGround;
 
         // Crear una nueva fila con 19 bloques
-        Random random = new Random();
-        boolean[] occupied = new boolean[MAX_X / SQUARE_SIDE];
-        int totalBlocks = 19;
-
-        
-        int step = (MAX_X / SQUARE_SIDE) / totalBlocks;
-        int position = 0;
-        for (int i = 0; i < totalBlocks; i++) {
-            occupied[position] = true;
-            position += step;
-            if (position >= occupied.length) {
-                position = random.nextInt(occupied.length);
-            }
-        }
+//        Random random = new Random();
+//        boolean[] occupied = new boolean[MAX_X / SQUARE_SIDE];
+//        int totalBlocks = 19;
+//
+//        
+//        int step = (MAX_X / SQUARE_SIDE) / totalBlocks;
+//        int position = 0;
+//        for (int i = 0; i < totalBlocks; i++) {
+//            occupied[position] = true;
+//            position += step;
+//            if (position >= occupied.length) {
+//                position = random.nextInt(occupied.length);
+//            }
+//        }
 
         // Crear los bloques en sus posiciones
-        for (int i = 0; i < occupied.length; i++) {
-            if (occupied[i]) {
+        for (int i = 0; i < 19; i++) {
+            //if (occupied[i]) {
                 int x = i * SQUARE_SIDE;
                 int y = MAX_Y - SQUARE_SIDE; // Posición más baja
                 Square newBlock = new Square(x, y, Color.GRAY, this);
                 groundSquares.put(newBlock.getCoordinates(), newBlock);
-            }
+            //}
         }
 
         // Actualizar nivel

@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import model.Game;
-import model.SoundManager;
+//import model.SoundManager;
 
 /**
  *
@@ -31,7 +31,7 @@ public class MainWindowA extends javax.swing.JFrame {
     private static final int OBSTACLE_INTERVAL = 5000; // Intervalo en milisegundos para engadir obstáculos (5 segundos)
 
     private Game game = null; // Referenza ao obxecto do xogo actual
-    private SoundManager soundManager = new SoundManager(); // Referencia ao manager do son
+    //private SoundManager soundManager = new SoundManager(); // Referencia ao manager do son
 
     /**
      * Creates new form MainWindowA
@@ -154,21 +154,23 @@ public class MainWindowA extends javax.swing.JFrame {
         public boolean dispatchKeyEvent(KeyEvent e) {
             if (game != null && !tglbtnPause.isSelected() && e.getID() == KeyEvent.KEY_PRESSED) {
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_LEFT:
+                    case KeyEvent.VK_LEFT -> {
                         game.movePieceLeft();
                         return true;
-                    case KeyEvent.VK_RIGHT:
+                    }
+                    case KeyEvent.VK_RIGHT -> {
                         game.movePieceRight();
                         return true;
-                    case KeyEvent.VK_DOWN:
+                    }
+                    case KeyEvent.VK_DOWN -> {
                         game.movePieceDown();
                         return true;
-                    case KeyEvent.VK_UP:
+                    }
+                    case KeyEvent.VK_UP -> {
                         game.rotatePiece();
                         return true;
-                    case KeyEvent.VK_SPACE:
-                        game.hardDropPiece();
-                        break;
+                    }
+                    case KeyEvent.VK_SPACE -> game.hardDropPiece();
                 }
             }
             return false;
