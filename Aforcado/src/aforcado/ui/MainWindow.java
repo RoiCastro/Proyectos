@@ -22,7 +22,8 @@ public class MainWindow extends javax.swing.JFrame {
      */
     public MainWindow() {
         initComponents();
-        monicreque= new JLabel[] {Hangman0,Hangman1,Hangman2,Hangman3,Hangman4,Hangman5,Hangman6};
+        monicreque = new JLabel[]{Hangman0, Hangman1, Hangman2, Hangman3, Hangman4, Hangman5, Hangman6};
+        DBWordGenerator.ifDatabaseNotExist();
     }
 
     /**
@@ -34,12 +35,6 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        ModoDeXogo = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jComboBoxModoDeXogo = new javax.swing.JComboBox<>();
-        SecretWord = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        jTextFieldSecretWord = new javax.swing.JTextField();
         Aforcado = new javax.swing.JPanel();
         Hangman0 = new javax.swing.JLabel();
         Hangman1 = new javax.swing.JLabel();
@@ -61,60 +56,6 @@ public class MainWindow extends javax.swing.JFrame {
         Menu = new javax.swing.JPanel();
         jButtonSair = new javax.swing.JButton();
         jButtonNovaPartida = new javax.swing.JButton();
-
-        jLabel1.setText("Selecciona un modo de xogo");
-
-        jComboBoxModoDeXogo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Un xogador xerando a palabra ao azar", "Dous xogadores escribindo a palabra" }));
-        jComboBoxModoDeXogo.setToolTipText("");
-
-        javax.swing.GroupLayout ModoDeXogoLayout = new javax.swing.GroupLayout(ModoDeXogo);
-        ModoDeXogo.setLayout(ModoDeXogoLayout);
-        ModoDeXogoLayout.setHorizontalGroup(
-            ModoDeXogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ModoDeXogoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(ModoDeXogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jComboBoxModoDeXogo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        ModoDeXogoLayout.setVerticalGroup(
-            ModoDeXogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ModoDeXogoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBoxModoDeXogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jLabel5.setText("Introduce la palabra secreta :");
-
-        javax.swing.GroupLayout SecretWordLayout = new javax.swing.GroupLayout(SecretWord);
-        SecretWord.setLayout(SecretWordLayout);
-        SecretWordLayout.setHorizontalGroup(
-            SecretWordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(SecretWordLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldSecretWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        SecretWordLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel5, jTextFieldSecretWord});
-
-        SecretWordLayout.setVerticalGroup(
-            SecretWordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(SecretWordLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(SecretWordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTextFieldSecretWord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        SecretWordLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel5, jTextFieldSecretWord});
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -333,29 +274,53 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1FocusGained
 
     private void startNewGame() {
-        JOptionPane.showConfirmDialog(this, ModoDeXogo, "Menú de xogo", JOptionPane.CANCEL_OPTION);
-        int index = jComboBoxModoDeXogo.getSelectedIndex();
+
+        // Opciones del ComboBox
+        String[] opciones = {
+            "Palabra Aleatoria de array",
+            "Palabra escrita por usuario",
+            "Palabra de la base de datos",
+            "Opción 4"};
+
+        // Mostrar el cuadro de diálogo con ComboBox
+        int index = JOptionPane.showOptionDialog(
+                null, // Componente padre
+                "Selecciona una opción:", // Mensaje
+                "Diálogo con ComboBox", // Título
+                JOptionPane.DEFAULT_OPTION, // Tipo de opciones (por defecto)
+                JOptionPane.QUESTION_MESSAGE, // Tipo de mensaje
+                null, // Icono
+                opciones, // Opciones
+                opciones[0] // Opción seleccionada por defecto
+        );
+        //Si cierra va a la por defecto
+        if (index == JOptionPane.CLOSED_OPTION) {
+            index = 0;
+        }
         for (JLabel jLabel : monicreque) {
             jLabel.setVisible(false);
         }
         try {
+            WordGenerator wordAleatory;
             switch (index) {
                 case 0 -> {
-                    ArrayWordGenerator wordAleatory = new ArrayWordGenerator();
-                    String palabra = wordAleatory.generateWord();
-                    hangman = new HangMan(palabra);
-                    jLabelAdivinar.setText(hangman.showHiddenWord());
+                    wordAleatory = new ArrayWordGenerator();
+                    break;
                 }
                 case 1 -> {
-                    jTextFieldSecretWord.setText("");
-                    JOptionPane.showConfirmDialog(this, SecretWord, "Palabra secreta", JOptionPane.CANCEL_OPTION);
-                    hangman = new HangMan(jTextFieldSecretWord.getText());
-                    jLabelAdivinar.setText(hangman.showHiddenWord());
+                    wordAleatory = new GUIKeyboardWordGenerator();
+                    break;
+                }
+                case 2 -> {
+                    wordAleatory = new DBWordGenerator();
+                    break;
                 }
                 default ->
                     throw new AssertionError();
             }
-
+            String palabra = wordAleatory.generateWord();
+            hangman = new HangMan(palabra);
+            jLabelAdivinar.setText(hangman.showHiddenWord());
         } catch (GenerateWordException e) {
 
         }
@@ -375,7 +340,18 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     private void tryChar() {
-        hangman.tryChar(jTextField1.getText().toLowerCase().charAt(0));
+        // Obter a letra do campo de texto e converter a minúsculas
+        String text = jTextField1.getText(); // Se puede usar trim() para eliminar espazos en branco 
+        if (text.isEmpty()) {
+            // Se o campo está vacío, non facemos nada ou mostramos un mensaxe de erro
+            JOptionPane.showMessageDialog(null, "Por favor, ingresa unha letra válida.");
+            return;  // Saímos do método sen continuar
+        }
+
+        char letter = text.charAt(0);  // Tomamos a primeira letra
+        hangman.tryChar(letter);       // Intentamos a letra no xogo
+
+        // Mostramos o monicreque correspondente ao número de erros
         monicreque[hangman.getFails().size()].setVisible(true);
     }
 
@@ -425,22 +401,16 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel Hangman6;
     private javax.swing.JPanel Menu;
     private javax.swing.JPanel MenuJuego;
-    private javax.swing.JPanel ModoDeXogo;
-    private javax.swing.JPanel SecretWord;
     private javax.swing.JPanel Titulo;
     private javax.swing.JButton jButtonNovaPartida;
     private javax.swing.JButton jButtonProbar;
     private javax.swing.JButton jButtonSair;
-    private javax.swing.JComboBox<String> jComboBoxModoDeXogo;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelAdivinar;
     private javax.swing.JLabel jLabelFallos;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextFieldSecretWord;
     // End of variables declaration//GEN-END:variables
 }
