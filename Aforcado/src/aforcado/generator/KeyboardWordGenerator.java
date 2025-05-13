@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package aforcado.ui;
+package aforcado.generator;
 
+import aforcado.ui.GenerateWordException;
 import java.io.Console;
 import java.util.Scanner;
 

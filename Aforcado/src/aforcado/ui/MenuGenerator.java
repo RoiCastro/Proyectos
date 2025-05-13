@@ -4,6 +4,8 @@
  */
 package aforcado.ui;
 
+import aforcado.generator.KeyboardWordGenerator;
+import aforcado.generator.ArrayWordGenerator;
 import aforcado.model.HangMan;
 import java.util.Scanner;
 

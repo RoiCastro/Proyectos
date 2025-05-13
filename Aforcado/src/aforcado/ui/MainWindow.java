@@ -4,6 +4,11 @@
  */
 package aforcado.ui;
 
+import aforcado.generator.DBWordGenerator;
+import aforcado.generator.WordGenerator;
+import aforcado.generator.GUIKeyboardWordGenerator;
+import aforcado.generator.ArrayWordGenerator;
+import aforcado.generator.DBInitializer;
 import aforcado.model.HangMan;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -23,7 +28,7 @@ public class MainWindow extends javax.swing.JFrame {
     public MainWindow() {
         initComponents();
         monicreque = new JLabel[]{Hangman0, Hangman1, Hangman2, Hangman3, Hangman4, Hangman5, Hangman6};
-        DBWordGenerator.ifDatabaseNotExist();
+        DBInitializer.init();
     }
 
     /**
@@ -258,6 +263,7 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonProbarActionPerformed
 
     private void jButtonNovaPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovaPartidaActionPerformed
+        
         startNewGame();
         jButtonProbar.setEnabled(true);
         jLabelFallos.setText("");
