@@ -10,6 +10,7 @@ import aforcado.generator.GUIKeyboardWordGenerator;
 import aforcado.generator.ArrayWordGenerator;
 import aforcado.generator.DBInitializer;
 import aforcado.model.HangMan;
+import java.awt.event.KeyEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -99,6 +100,11 @@ public class MainWindow extends javax.swing.JFrame {
         jTextField1.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextField1FocusGained(evt);
+            }
+        });
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField1KeyPressed(evt);
             }
         });
 
@@ -263,7 +269,7 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonProbarActionPerformed
 
     private void jButtonNovaPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovaPartidaActionPerformed
-        
+
         startNewGame();
         jButtonProbar.setEnabled(true);
         jLabelFallos.setText("");
@@ -279,14 +285,22 @@ public class MainWindow extends javax.swing.JFrame {
         jTextField1.setText("");
     }//GEN-LAST:event_jTextField1FocusGained
 
+    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
+        if (evt.getKeyCode()==10) {
+            tryChar();
+            showGameStatus();
+            jTextField1.setText("");
+        }
+    }//GEN-LAST:event_jTextField1KeyPressed
+
     private void startNewGame() {
 
         // Opciones del ComboBox
         String[] opciones = {
-            "Palabra Aleatoria de array",
+            "Palabra aleatoria de array",
             "Palabra escrita por usuario",
             "Palabra de la base de datos",
-            "Opción 4"};
+            "Palabra de fichero de texto"};
 
         // Mostrar el cuadro de diálogo con ComboBox
         int index = JOptionPane.showOptionDialog(
