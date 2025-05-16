@@ -4,32 +4,59 @@
  */
 package com.tacebook.controller;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import java.io.IOException;
-import static javafx.application.Application.launch;
+import com.tacebook.view.*;
+import com.tacebook.model.*;
+import com.tacebook.persistencia.*;
 
-public class InitMenuController extends Application {
+public class InitMenuController {
 
-    @Override
-    public void start(Stage primaryStage) {
-        try {
-            // Cargar el archivo FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/tacebook/view/InitMenu.fxml"));
-            Scene scene = new Scene(loader.load());
+    private InitMenuView initMenuView = new InitMenuView(this);
 
-            // Configurar el título y la escena
-            primaryStage.setTitle("Tacebook - Login");
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static void main(String[] args) {
+        InitMenuController controller = new InitMenuController();
+        controller.init();
+    }
+
+    private void init() {
+        boolean salir = false;
+        while (!salir) {
+            salir = initMenuView.showLoginMenu();
         }
     }
 
-    public static void main(String[] args) {
-        launch(args);  // Llamar al método launch para iniciar la aplicación JavaFX
+    public void login(String name, String password) {
+        try {
+            ProfileController profileController = new ProfileController();
+            Profile profile = ProfileDB.findByNameAndPassword(name, password, profileController.getPostsShowed());
+            if (profile == null) {
+                initMenuView.showLoginErrorMessage();
+            } else {
+                profileController.openSession(profile);
+            }
+        } catch (PersistenceException e) {
+            System.out.println("Erro ao iniciar sesión: " + e.getMessage());
+        }
+    }
+
+    public void register() {
+        initMenuView.showRegisterMenu();
+    }
+
+    public void createProfile(String name, String password, String status) {
+        try {
+            Profile existingProfile = ProfileDB.findByName(name, 0);
+            while (existingProfile != null) {
+                name = initMenuView.showNewNameMenu();
+                existingProfile = ProfileDB.findByName(name, 0);
+            }
+
+            Profile profile = new Profile(name, password, status);
+            ProfileDB.save(profile);
+
+            ProfileController profileController = new ProfileController();
+            profileController.openSession(profile);
+        } catch (PersistenceException e) {
+            System.out.println("Erro ao crear perfil: " + e.getMessage());
+        }
     }
 }

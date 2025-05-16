@@ -4,12 +4,10 @@
  */
 package com.tacebook.model;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
- *
- * @author roi.castrocalvar
+ * Clase que representa un comentario hecho a una publicación.
  */
 public class Comment {
 
@@ -17,91 +15,59 @@ public class Comment {
     private Date date;
     private String text;
 
-    /**
-     * Obtén o identificador do comentario.
-     *
-     * @return O identificador do comentario.
-     */
-    public int getId() {
-        return id;
-    }
+    private Profile sourceProfile;
+    private Post post;
 
     /**
-     * Esteablece o identificador do comentario.
+     * Constructor de la clase Comment.
      *
-     * @param id O identificador do comentario.
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    /**
-     * Obtén a data do comentario.
-     *
-     * @return A data do comentario.
-     */
-    public Date getDate() {
-        return date;
-    }
-
-    /**
-     * Establece a data do comentario.
-     *
-     * @param date A data do comentario.
-     */
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    /**
-     * Obtén o texto do comentario.
-     *
-     * @return O texto do comentario.
-     */
-    public String getText() {
-        return text;
-    }
-
-    /**
-     * Establece o texto do comentario.
-     *
-     * @param text O texto do comentario.
-     */
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    /**
-     * Constructor da clase Comment.
-     *
-     * @param id O identificador do comentario.
-     * @param date A data do comentario.
-     * @param text O texto do comentario.
+     * @param id Identificador del comentario.
+     * @param date Fecha del comentario.
+     * @param text Texto del comentario.
      */
     public Comment(int id, Date date, String text) {
         this.id = id;
         this.date = date;
         this.text = text;
     }
-    
-     // De aqui para abajo no estoy seguro de lo que hago
-    private ArrayList<Post> posts;
-    private ArrayList<Profile> sourceProfile;
 
-    public ArrayList<Post> getPosts() {
-        return posts;
+    public int getId() {
+        return id;
     }
 
-    public void setPosts(ArrayList<Post> posts) {
-        this.posts = posts;
+    public Date getDate() {
+        return date;
     }
 
-    public ArrayList<Profile> getSourceProfile() {
+    public String getText() {
+        return text;
+    }
+
+    public Profile getSourceProfile() {
         return sourceProfile;
     }
 
-    public void setSourceProfile(ArrayList<Profile> sourceProfile) {
+    public void setSourceProfile(Profile sourceProfile) {
         this.sourceProfile = sourceProfile;
     }
-    
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 }

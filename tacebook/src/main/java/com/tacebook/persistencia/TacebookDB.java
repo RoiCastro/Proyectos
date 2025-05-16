@@ -6,13 +6,13 @@ package com.tacebook.persistencia;
 
 import com.tacebook.model.Profile;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- *
- * @author roi.castrocalvar
+ * Clase que simula la base de datos con almacenamiento estático de perfiles.
  */
 public class TacebookDB {
 
-    public static ArrayList<Profile> profiles;
-    
+    // Colección estática que almacena todos los perfiles
+    public static List<Profile> profiles = new ArrayList<>();
 }
