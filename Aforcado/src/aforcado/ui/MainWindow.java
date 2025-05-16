@@ -10,7 +10,6 @@ import aforcado.generator.GUIKeyboardWordGenerator;
 import aforcado.generator.ArrayWordGenerator;
 import aforcado.generator.DBInitializer;
 import aforcado.model.HangMan;
-import java.awt.event.KeyEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 

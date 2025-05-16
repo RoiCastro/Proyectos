@@ -8,7 +8,7 @@ import java.sql.*;
 
 public class DBInitializer {
 
-    private static final String URL = "jdbc:sqlite:words.db";
+    public static final String URL = "jdbc:sqlite:words.db";
 
     public static void init() {
         try (Connection c = DriverManager.getConnection(URL);

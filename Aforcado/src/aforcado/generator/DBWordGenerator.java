@@ -20,8 +20,6 @@ import java.sql.SQLException;
  */
 public class DBWordGenerator implements WordGenerator {
 
-    private static final String URL = "jdbc:sqlite:words.db"; // Ubicación de la base de datos. Es estática para poder llamar al método de creación en cualquier momento.
-
     /**
      * Devuelve una palabra aleatoria desde la base de datos.
      */
@@ -31,7 +29,7 @@ public class DBWordGenerator implements WordGenerator {
         ArrayList<String> words = new ArrayList<>();
         String sql = "SELECT word FROM words";
 
-        try (Connection c = DriverManager.getConnection(URL);
+        try (Connection c = DriverManager.getConnection(DBInitializer.URL);
              Statement st = c.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
 
