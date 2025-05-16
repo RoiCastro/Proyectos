@@ -9,7 +9,9 @@ import aforcado.generator.WordGenerator;
 import aforcado.generator.GUIKeyboardWordGenerator;
 import aforcado.generator.ArrayWordGenerator;
 import aforcado.generator.DBInitializer;
+import aforcado.generator.FileWordGenerator;
 import aforcado.model.HangMan;
+import java.awt.event.KeyEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -268,7 +270,10 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonProbarActionPerformed
 
     private void jButtonNovaPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovaPartidaActionPerformed
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
         startNewGame();
         jButtonProbar.setEnabled(true);
         jLabelFallos.setText("");
@@ -285,7 +290,11 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1FocusGained
 
     private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
+<<<<<<< Updated upstream
         if (evt.getKeyCode()==10) {
+=======
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+>>>>>>> Stashed changes
             tryChar();
             showGameStatus();
             jTextField1.setText("");
@@ -296,10 +305,17 @@ public class MainWindow extends javax.swing.JFrame {
 
         // Opciones del ComboBox
         String[] opciones = {
+<<<<<<< Updated upstream
             "Palabra aleatoria de array",
             "Palabra escrita por usuario",
             "Palabra de la base de datos",
             "Palabra de fichero de texto"};
+=======
+            "Palabra Aleatoria de array",
+            "Palabra Escrita por usuario",
+            "Palabra de la base de datos",
+            "Palabra de un archivo"};
+>>>>>>> Stashed changes
 
         // Mostrar el cuadro de diálogo con ComboBox
         int index = JOptionPane.showOptionDialog(
@@ -334,6 +350,11 @@ public class MainWindow extends javax.swing.JFrame {
                     wordAleatory = new DBWordGenerator();
                     break;
                 }
+                case 3 -> {
+                    wordAleatory = new FileWordGenerator();
+                    break;
+                }
+
                 default ->
                     throw new AssertionError();
             }
