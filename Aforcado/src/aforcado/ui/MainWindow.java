@@ -263,7 +263,7 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonProbarActionPerformed
 
     private void jButtonNovaPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovaPartidaActionPerformed
-        
+
         startNewGame();
         jButtonProbar.setEnabled(true);
         jLabelFallos.setText("");
