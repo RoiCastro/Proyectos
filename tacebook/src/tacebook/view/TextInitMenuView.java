@@ -4,21 +4,32 @@
  */
 package tacebook.view;
 
-import tacebook.controller.InitMenuController;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
+import tacebook.controller.InitMenuController;
 
 /**
- * Clase que representa la vista del menú inicial de la aplicación.
+ * Clase que representa la vista de texto del menú inicial de la aplicación.
+ * Permite al usuario iniciar sesión, registrarse o salir mediante consola.
  */
-public class TextInitMenuView implements InitMenuView{
+public class TextInitMenuView implements InitMenuView {
 
     private InitMenuController initMenuController;
 
+    /**
+     * Constructor de la vista de menú inicial en modo texto.
+     * 
+     * @param controller el controlador del menú inicial
+     */
     public TextInitMenuView(InitMenuController controller) {
         this.initMenuController = controller;
     }
 
+    /**
+     * Muestra el menú de inicio de sesión y registro por consola.
+     * 
+     * @return true si se debe salir del bucle principal, false para continuar
+     */
+    @Override
     public boolean showLoginMenu() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -39,7 +50,7 @@ public class TextInitMenuView implements InitMenuView{
                     break;
                 case "2":
                     initMenuController.register();
-                    break;
+                    return true; // <-- Añadido: salir del bucle tras registro
                 case "3":
                     System.out.println("Saliendo de la aplicación...");
                     return true;
@@ -49,10 +60,18 @@ public class TextInitMenuView implements InitMenuView{
         }
     }
 
+    /**
+     * Muestra un mensaje de error cuando el login es incorrecto.
+     */
+    @Override
     public void showLoginErrorMessage() {
         System.out.println("Error: Usuario o contraseña incorrectos.");
     }
 
+    /**
+     * Muestra el menú de registro de usuario por consola.
+     */
+    @Override
     public void showRegisterMenu() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("\n--- REGISTRO DE NUEVO PERFIL ---");
@@ -72,8 +91,8 @@ public class TextInitMenuView implements InitMenuView{
             password2 = scanner.nextLine();
 
             if (!password.equals(password2)) {
-                System.out.println("Las contraseñas no coinciden, inténtalo de nuevo.");
-                continue;
+                System.out.println("Las contraseñas no coinciden, volviendo al menú de inicio de sesión.");
+                return; // Volver al menú de inicio de sesión
             }
             break;
         }
@@ -84,32 +103,55 @@ public class TextInitMenuView implements InitMenuView{
         initMenuController.createProfile(name, password, status);
     }
 
+    /**
+     * Muestra un mensaje para introducir un nuevo nombre de usuario cuando el anterior ya existe.
+     * 
+     * @return el nuevo nombre de usuario introducido
+     */
+    @Override
     public String showNewNameMenu() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("El nombre de usuario introducido ya está en uso. Por favor, introduce un nuevo nombre:");
         return scanner.nextLine();
     }
 
+    /**
+     * Lee un número desde la entrada estándar.
+     * 
+     * @param scanner el objeto Scanner para leer la entrada
+     * @return el número leído
+     */
     private int readNumber(Scanner scanner) {
-        try {
-            int number = scanner.nextInt();
-            scanner.nextLine(); // Limpiar salto de línea
-            return number;
-        } catch (NoSuchElementException | NumberFormatException e) {
-            scanner.nextLine(); // Limpiar entrada incorrecta
-            System.out.println("Debes introducir un número. Inténtalo de nuevo.");
-            return readNumber(scanner);
+        while (true) {
+            String input = scanner.nextLine();
+            try {
+                return Integer.parseInt(input.trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Debes introducir un número. Inténtalo de nuevo.");
+            }
         }
     }
 
+    /**
+     * Muestra un mensaje de error de conexión.
+     */
+    @Override
     public void showConnectionErrorMessage() {
         System.out.println("Erro na conexión co almacén de datos!");
     }
 
+    /**
+     * Muestra un mensaje de error de lectura de datos.
+     */
+    @Override
     public void showReadErrorMessage() {
         System.out.println("Erro na lectura de datos!");
     }
 
+    /**
+     * Muestra un mensaje de error de escritura de datos.
+     */
+    @Override
     public void showWriteErrorMessage() {
         System.out.println("Erro na escritura dos datos!");
     }

@@ -4,24 +4,39 @@
  */
 package tacebook.view;
 
-import tacebook.model.Post;
-import tacebook.model.Profile;
-import tacebook.model.Message;
-import tacebook.model.Comment;
-import tacebook.controller.ProfileController;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
+import tacebook.controller.ProfileController;
+import tacebook.model.Comment;
+import tacebook.model.Message;
+import tacebook.model.Post;
+import tacebook.model.Profile;
 
-public class TextProfileView implements ProfileView{
+/**
+ * Vista de perfil en modo texto para la aplicación Tacebook.
+ * Permite mostrar y gestionar información del perfil y sus interacciones.
+ */
+public class TextProfileView implements ProfileView {
 
     private int postsShowed = 10;
     private final ProfileController profileController;
     private final SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy 'ás' HH:mm:ss");
 
+    /**
+     * Constructor de la vista de perfil en modo texto.
+     * 
+     * @param controller el controlador del perfil
+     */
     public TextProfileView(ProfileController controller) {
         this.profileController = controller;
     }
 
+    /**
+     * Muestra la información del perfil, publicaciones, amigos, solicitudes y mensajes.
+     * 
+     * @param ownProfile indica si es el perfil propio
+     * @param profile el perfil a mostrar
+     */
     private void showProfileInfo(boolean ownProfile, Profile profile) {
         System.out.println("\n--- PERFIL DE " + profile.getName() + " ---");
         System.out.println("Estado: " + profile.getStatus());
@@ -33,7 +48,8 @@ public class TextProfileView implements ProfileView{
             System.out.println("   Autor: " + post.getAuthor().getName());
             System.out.println("   Likes: " + post.getProfileLikes().size());
             for (Comment comment : post.getComments()) {
-                System.out.println("      Comentario de " + comment.getSourceProfile().getName() + " (" + formatter.format(comment.getDate()) + "): " + comment.getText());
+                System.out.println("      Comentario de " + comment.getSourceProfile().getName() + " ("
+                        + formatter.format(comment.getDate()) + "): " + comment.getText());
             }
             postIndex++;
         }
@@ -53,11 +69,17 @@ public class TextProfileView implements ProfileView{
         for (Message message : profile.getMessages()) {
             String from = message.getSourceProfile().getName();
             String to = message.getDestProfile().getName();
-            System.out.println("[" + msgIndex + "] De: " + from + ", Para: " + to + ", " + (message.isRead() ? "Lido" : "Non lido") + ", " + formatter.format(message.getDate()));
+            System.out.println("[" + msgIndex + "] De: " + from + ", Para: " + to + ", "
+                    + (message.isRead() ? "Lido" : "Non lido") + ", " + formatter.format(message.getDate()));
             msgIndex++;
         }
     }
 
+    /**
+     * Muestra el menú de opciones del perfil y gestiona la interacción por consola.
+     * 
+     * @param profile el perfil a mostrar
+     */
     public void showProfileMenu(Profile profile) {
         boolean ownProfile = profile.getName().equals(profileController.getSessionProfile().getName());
         Scanner scanner = new Scanner(System.in);
@@ -127,6 +149,13 @@ public class TextProfileView implements ProfileView{
         }
     }
 
+    /**
+     * Permite cambiar el estado del perfil si es el propio.
+     * 
+     * @param ownProfile indica si es el perfil propio
+     * @param scanner el objeto Scanner para leer la entrada
+     * @param profile el perfil a modificar
+     */
     private void changeStatus(boolean ownProfile, Scanner scanner, Profile profile) {
         if (ownProfile) {
             System.out.print("Novo estado: ");
@@ -137,7 +166,19 @@ public class TextProfileView implements ProfileView{
         }
     }
 
+    /**
+     * Permite seleccionar un elemento de una lista por índice.
+     * 
+     * @param text texto a mostrar
+     * @param maxNumber número máximo permitido
+     * @param scanner el objeto Scanner para leer la entrada
+     * @return el índice seleccionado
+     */
     private int selectElement(String text, int maxNumber, Scanner scanner) {
+        if (maxNumber <= 0) {
+            System.out.println("Non hai elementos dispoñibles.");
+            return -1;
+        }
         int num = -1;
         do {
             System.out.print(text);
@@ -146,12 +187,24 @@ public class TextProfileView implements ProfileView{
         return num;
     }
 
+    /**
+     * Permite escribir una nueva publicación.
+     * 
+     * @param scanner el objeto Scanner para leer la entrada
+     * @param profile el perfil donde publicar
+     */
     private void writeNewPost(Scanner scanner, Profile profile) {
         System.out.print("Texto da publicación: ");
         String text = scanner.nextLine();
         profileController.newPost(text, profile);
     }
 
+    /**
+     * Permite comentar una publicación.
+     * 
+     * @param scanner el objeto Scanner para leer la entrada
+     * @param profile el perfil donde comentar
+     */
     private void commentPost(Scanner scanner, Profile profile) {
         int index = selectElement("Selecciona publicación: ", profile.getPosts().size(), scanner);
         System.out.print("Texto do comentario: ");
@@ -159,11 +212,24 @@ public class TextProfileView implements ProfileView{
         profileController.newComment(profile.getPosts().get(index), text);
     }
 
+    /**
+     * Permite dar like a una publicación.
+     * 
+     * @param scanner el objeto Scanner para leer la entrada
+     * @param profile el perfil donde dar like
+     */
     private void addLike(Scanner scanner, Profile profile) {
         int index = selectElement("Selecciona publicación para dar like: ", profile.getPosts().size(), scanner);
         profileController.newLike(profile.getPosts().get(index));
     }
 
+    /**
+     * Permite mostrar la biografía de otro perfil.
+     * 
+     * @param ownProfile indica si es el perfil propio
+     * @param scanner el objeto Scanner para leer la entrada
+     * @param profile el perfil actual
+     */
     private void showBiography(boolean ownProfile, Scanner scanner, Profile profile) {
         if (ownProfile) {
             int index = selectElement("Selecciona amizade para ver perfil: ", profile.getFriends().size(), scanner);
@@ -173,13 +239,32 @@ public class TextProfileView implements ProfileView{
         }
     }
 
+    /**
+     * Permite enviar una solicitud de amistad.
+     * 
+     * @param ownProfile indica si es el perfil propio
+     * @param scanner el objeto Scanner para leer la entrada
+     * @param profile el perfil actual
+     */
     private void sendFriendshipRequest(boolean ownProfile, Scanner scanner, Profile profile) {
         System.out.print("Nome do perfil destino: ");
         String name = scanner.nextLine();
         profileController.newFriendshipRequest(name);
     }
 
+    /**
+     * Permite aceptar o rechazar una solicitud de amistad.
+     * 
+     * @param ownProfile indica si es el perfil propio
+     * @param scanner el objeto Scanner para leer la entrada
+     * @param profile el perfil actual
+     * @param accept true para aceptar, false para rechazar
+     */
     private void proccessFriendshipRequest(boolean ownProfile, Scanner scanner, Profile profile, boolean accept) {
+        if (profile.getFriendshipRequests().isEmpty()) {
+            System.out.println("Non tes solicitudes de amizade pendentes.");
+            return;
+        }
         int index = selectElement("Selecciona solicitude: ", profile.getFriendshipRequests().size(), scanner);
         Profile source = profile.getFriendshipRequests().get(index);
         if (accept) {
@@ -189,6 +274,13 @@ public class TextProfileView implements ProfileView{
         }
     }
 
+    /**
+     * Permite enviar un mensaje privado.
+     * 
+     * @param ownProfile indica si es el perfil propio
+     * @param scanner el objeto Scanner para leer la entrada
+     * @param profile el perfil actual
+     */
     private void sendPrivateMessage(boolean ownProfile, Scanner scanner, Profile profile) {
         Profile dest;
         if (ownProfile) {
@@ -202,6 +294,13 @@ public class TextProfileView implements ProfileView{
         profileController.newMessage(dest, text);
     }
 
+    /**
+     * Permite leer un mensaje privado.
+     * 
+     * @param ownProfile indica si es el perfil propio
+     * @param scanner el objeto Scanner para leer la entrada
+     * @param profile el perfil actual
+     */
     private void readPrivateMessage(boolean ownProfile, Scanner scanner, Profile profile) {
         int index = selectElement("Selecciona mensaxe: ", profile.getMessages().size(), scanner);
         Message message = profile.getMessages().get(index);
@@ -227,66 +326,125 @@ public class TextProfileView implements ProfileView{
         }
     }
 
+    /**
+     * Permite eliminar un mensaje privado.
+     * 
+     * @param ownProfile indica si es el perfil propio
+     * @param scanner el objeto Scanner para leer la entrada
+     * @param profile el perfil actual
+     */
     private void deletePrivateMessage(boolean ownProfile, Scanner scanner, Profile profile) {
         int index = selectElement("Selecciona mensaxe para borrar: ", profile.getMessages().size(), scanner);
         profileController.deleteMessage(profile.getMessages().get(index));
     }
 
+    /**
+     * Permite mostrar publicaciones antiguas.
+     * 
+     * @param scanner el objeto Scanner para leer la entrada
+     * @param profile el perfil actual
+     */
     private void showOldPosts(Scanner scanner, Profile profile) {
         System.out.print("Número de publicacións a mostrar: ");
         int n = readNumber(scanner);
-        postsShowed += n;
-        profileController.reloadProfile();
+        if (n > 0) {
+            postsShowed += n;
+            profileController.reloadProfile();
+        } else {
+            System.out.println("Debes introducir un número positivo.");
+        }
     }
 
+    /**
+     * Lee un número desde la entrada estándar.
+     * 
+     * @param scanner el objeto Scanner para leer la entrada
+     * @return el número leído
+     */
     private int readNumber(Scanner scanner) {
         try {
-            int number = scanner.nextInt();
-            scanner.nextLine(); // limpar salto de liña
+            int number = Integer.parseInt(scanner.nextLine());
             return number;
         } catch (Exception e) {
-            scanner.nextLine(); // limpar entrada incorrecta
             System.out.println("Debes introducir un número. Intenta de novo.");
             return readNumber(scanner);
         }
     }
 
+    /**
+     * Devuelve el número de publicaciones mostradas.
+     * 
+     * @return número de publicaciones mostradas
+     */
     public int getPostsShowed() {
         return postsShowed;
     }
 
+    /**
+     * Muestra un mensaje cuando el perfil no se encuentra.
+     */
     public void showProfileNotFoundMessage() {
         System.out.println("Perfil non atopado.");
     }
 
+    /**
+     * Muestra un mensaje cuando se intenta dar like a la propia publicación.
+     */
     public void showCannotLikeOwnPostMessage() {
         System.out.println("Non podes facer like á túa propia publicación.");
     }
 
+    /**
+     * Muestra un mensaje cuando ya se ha dado like a una publicación.
+     */
     public void showAlreadyLikedPostMessage() {
         System.out.println("Xa fixeches like nesta publicación.");
     }
 
+    /**
+     * Muestra un mensaje cuando ya existe amistad con el perfil indicado.
+     * 
+     * @param profileName nombre del perfil
+     */
     public void showIsAlreadyFriendMessage(String profileName) {
         System.out.println("Xa tes amizade con " + profileName);
     }
 
+    /**
+     * Muestra un mensaje cuando ya existe una solicitud de amistad.
+     * 
+     * @param profileName nombre del perfil
+     */
     public void showExistsFrienshipRequestMessage(String profileName) {
         System.out.println("Xa existe unha solicitude de amizade con " + profileName);
     }
 
+    /**
+     * Muestra un mensaje cuando ya hay una solicitud de amistad pendiente.
+     * 
+     * @param profileName nombre del perfil
+     */
     public void showDuplicateFrienshipRequestMessage(String profileName) {
         System.out.println("Xa tes unha solicitude pendente con " + profileName);
     }
 
+    /**
+     * Muestra un mensaje de error de conexión.
+     */
     public void showConnectionErrorMessage() {
         System.out.println("Erro na conexión co almacén de datos!");
     }
 
+    /**
+     * Muestra un mensaje de error de lectura de datos.
+     */
     public void showReadErrorMessage() {
         System.out.println("Erro na lectura de datos!");
     }
 
+    /**
+     * Muestra un mensaje de error de escritura de datos.
+     */
     public void showWriteErrorMessage() {
         System.out.println("Erro na escritura dos datos!");
     }

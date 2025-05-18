@@ -4,71 +4,136 @@
  */
 package tacebook.controller;
 
+import java.util.Date; // Puede ser
+import tacebook.model.Comment;
+import tacebook.model.Message;
 import tacebook.model.Post;
 import tacebook.model.Profile;
-import tacebook.model.Message;
-import tacebook.model.Comment;
-import tacebook.persistencia.PostDB;
-import tacebook.persistencia.PersistenceException;
-import tacebook.persistencia.ProfileDB;
-import tacebook.persistencia.MessageDB;
 import tacebook.persistencia.CommentDB;
-import tacebook.view.TextProfileView;
+import tacebook.persistencia.MessageDB;
+import tacebook.persistencia.PersistenceException;
+import tacebook.persistencia.PostDB;
+import tacebook.persistencia.ProfileDB;
+import tacebook.view.GUIProfileView;
 import tacebook.view.ProfileView;
-import java.util.Date;
+import tacebook.view.TextProfileView;
 
+/**
+ * Controlador para la gestión de perfiles en Tacebook.
+ * Permite gestionar la sesión, publicaciones, comentarios, likes, amistades y
+ * mensajes.
+ */
 public class ProfileController {
 
     private ProfileView profileView = new TextProfileView(this);
     private Profile sessionProfile;
     private Profile shownProfile;
     private boolean textMode;
-    
-    
 
+    /**
+     * Crea un nuevo controlador de perfil.
+     * 
+     * @param textMode Si es true, se utiliza la vista de texto; si es false, se
+     *                 utiliza la vista gráfica.
+     */
+    public ProfileController(boolean textMode) {
+        this.textMode = textMode;
+
+        // Instanciamos la vista dependiendo del valor de textMode
+        if (textMode) {
+            this.profileView = new TextProfileView(this); // Vista en modo texto
+        } else {
+            this.profileView = new GUIProfileView(this); // Vista en modo gráfico (GUI)
+        }
+    }
+
+    /**
+     * Obtiene el perfil de la sesión actual.
+     * 
+     * @return El perfil de la sesión.
+     */
     public Profile getSessionProfile() {
-        return sessionProfile;
+        return this.sessionProfile;
     }
 
+    /**
+     * Obtiene el perfil actualmente mostrado.
+     * 
+     * @return El perfil mostrado.
+     */
     public Profile getShownProfile() {
-        return shownProfile;
+        return this.shownProfile;
     }
 
+    /**
+     * Establece el perfil que se va a mostrar y lo recarga.
+     * 
+     * @param profile Perfil a mostrar.
+     */
     public void setShownProfile(Profile profile) {
         this.shownProfile = profile;
         reloadProfile();
     }
 
+    /**
+     * Devuelve el número de publicaciones que se muestran.
+     * 
+     * @return Número de publicaciones mostradas.
+     */
     public int getPostsShowed() {
-        return profileView.getPostsShowed();
+        return this.profileView.getPostsShowed();
     }
 
+    /**
+     * Recarga el perfil mostrado desde la base de datos.
+     */
     public void reloadProfile() {
         try {
-            Profile updatedProfile = ProfileDB.findByName(shownProfile.getName(), profileView.getPostsShowed());
-            this.shownProfile = updatedProfile;
-            profileView.showProfileMenu(shownProfile);
+            this.shownProfile = ProfileDB.findByName(this.shownProfile.getName(), this.profileView.getPostsShowed());
         } catch (PersistenceException e) {
             System.out.println("Erro ao recargar o perfil: " + e.getMessage());
+
+            this.profileView.showProfileMenu(this.shownProfile);
         }
     }
 
+    /**
+     * Abre una sesión con el perfil proporcionado y muestra el menú de perfil.
+     * 
+     * @param sessionProfile Perfil de la sesión.
+     */
     public void openSession(Profile sessionProfile) {
         this.sessionProfile = sessionProfile;
         this.shownProfile = sessionProfile;
         profileView.showProfileMenu(shownProfile);
-    }
 
-    public void updateProfileStatus(String newStatus) {
-        try {
-            sessionProfile.setStatus(newStatus);
-            ProfileDB.update(sessionProfile);
-            reloadProfile();
-        } catch (PersistenceException e) {
-            System.out.println("Erro ao actualizar estado: " + e.getMessage());
+        if (profileView instanceof GUIProfileView) {
+            ((GUIProfileView) profileView).setVisible(true); // AQUI se fai visible
         }
     }
 
+    /**
+     * Actualiza el estado del perfil de la sesión.
+     * 
+     * @param newStatus Nuevo estado.
+     */
+    public void updateProfileStatus(String newStatus) {
+        try {
+            this.sessionProfile.setStatus(newStatus);
+            ProfileDB.update(this.sessionProfile);
+        } catch (PersistenceException e) {
+            System.out.println("Erro ao actualizar estado: " + e.getMessage());
+        }
+
+        this.reloadProfile();
+    }
+
+    /**
+     * Crea una nueva publicación en el perfil de destino.
+     * 
+     * @param text        Texto de la publicación.
+     * @param destProfile Perfil de destino.
+     */
     public void newPost(String text, Profile destProfile) {
         try {
             Post post = new Post(0, new Date(), text);
@@ -80,6 +145,12 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Añade un nuevo comentario a una publicación.
+     * 
+     * @param post        Publicación a comentar.
+     * @param commentText Texto del comentario.
+     */
     public void newComment(Post post, String commentText) {
         try {
             Comment comment = new Comment(0, new Date(), commentText);
@@ -92,6 +163,12 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Da like a una publicación si no es del propio usuario y no se ha dado like
+     * antes.
+     * 
+     * @param post Publicación a la que dar like.
+     */
     public void newLike(Post post) {
         try {
             if (!post.getAuthor().equals(sessionProfile)
@@ -104,6 +181,11 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Envía una solicitud de amistad a otro perfil.
+     * 
+     * @param profileName Nombre del perfil de destino.
+     */
     public void newFriendshipRequest(String profileName) {
         try {
             Profile destProfile = ProfileDB.findByName(profileName, profileView.getPostsShowed());
@@ -112,7 +194,7 @@ public class ProfileController {
                     && !sessionProfile.getFriends().contains(destProfile)
                     && !sessionProfile.getFriendshipRequests().contains(destProfile)
                     && !destProfile.getFriendshipRequests().contains(sessionProfile)) {
-                ProfileDB.saveFrienshipRequest(destProfile, sessionProfile);
+                ProfileDB.saveFriendshipRequest(destProfile, sessionProfile);
             }
             reloadProfile();
         } catch (PersistenceException e) {
@@ -120,9 +202,14 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Acepta una solicitud de amistad recibida.
+     * 
+     * @param sourceProfile Perfil que envió la solicitud.
+     */
     public void acceptFriendshipRequest(Profile sourceProfile) {
         try {
-            ProfileDB.removeFrienshipRequest(sessionProfile, sourceProfile);
+            ProfileDB.removeFriendshipRequest(sessionProfile, sourceProfile);
             ProfileDB.saveFriendship(sessionProfile, sourceProfile);
             reloadProfile();
         } catch (PersistenceException e) {
@@ -130,15 +217,26 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Rechaza una solicitud de amistad recibida.
+     * 
+     * @param sourceProfile Perfil que envió la solicitud.
+     */
     public void rejectFriendshipRequest(Profile sourceProfile) {
         try {
-            ProfileDB.removeFrienshipRequest(sessionProfile, sourceProfile);
+            ProfileDB.removeFriendshipRequest(sessionProfile, sourceProfile);
             reloadProfile();
         } catch (PersistenceException e) {
             System.out.println("Erro ao rexeitar amizade: " + e.getMessage());
         }
     }
 
+    /**
+     * Envía un nuevo mensaje a otro perfil.
+     * 
+     * @param destProfile Perfil de destino.
+     * @param text        Texto del mensaje.
+     */
     public void newMessage(Profile destProfile, String text) {
         try {
             Message message = new Message(0, text, new Date(), false);
@@ -151,6 +249,11 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Elimina un mensaje.
+     * 
+     * @param message Mensaje a eliminar.
+     */
     public void deleteMessage(Message message) {
         try {
             MessageDB.remove(message);
@@ -160,6 +263,11 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Marca un mensaje como leído.
+     * 
+     * @param message Mensaje a marcar como leído.
+     */
     public void markMessageAsRead(Message message) {
         try {
             message.setRead(true);
@@ -170,6 +278,12 @@ public class ProfileController {
         }
     }
 
+    /**
+     * Responde a un mensaje recibido.
+     * 
+     * @param message Mensaje original.
+     * @param text    Texto de la respuesta.
+     */
     public void replyMessage(Message message, String text) {
         try {
             message.setRead(true);

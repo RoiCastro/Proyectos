@@ -5,23 +5,46 @@
 package tacebook.view;
 
 /**
+ * Interfaz para la vista del menú inicial en la aplicación Tacebook.
+ * Define los métodos que deben implementar las vistas del menú inicial.
  *
  * @author Roi
  */
 public interface InitMenuView {
-    // Método para mostrar el menú de inicio de sesión, que devuelve un valor booleano
+    /**
+     * Muestra el menú de inicio de sesión.
+     * @return true si se debe salir del bucle principal, false para continuar
+     */
     public boolean showLoginMenu();
-    
-    // Métodos para mostrar mensajes de error, sin retorno (void)
+
+    /**
+     * Muestra un mensaje de error cuando el login es incorrecto.
+     */
     public void showLoginErrorMessage();
+
+    /**
+     * Muestra un mensaje de error de conexión.
+     */
     public void showConnectionErrorMessage();
+
+    /**
+     * Muestra un mensaje de error de lectura de datos.
+     */
     public void showReadErrorMessage();
+
+    /**
+     * Muestra un mensaje de error de escritura de datos.
+     */
     public void showWriteErrorMessage();
-    
-    // Método para mostrar un menú para cambiar nombre, que devuelve un String
+
+    /**
+     * Muestra un menú para cambiar el nombre de usuario.
+     * @return el nuevo nombre de usuario introducido
+     */
     public String showNewNameMenu();
-    
-    // Método para mostrar el menú de registro, sin retorno (void)
+
+    /**
+     * Muestra el menú de registro de usuario.
+     */
     public void showRegisterMenu();
 }
-

@@ -5,22 +5,33 @@
 package tacebook.persistencia;
 
 /**
- * Excepción que representa erros nas operacións de persistencia.
+ * Excepción que representa errores en las operaciones de persistencia.
  */
 public class PersistenceException extends Exception {
 
+    /**
+     * Código de error asociado a la excepción.
+     */
     private final int code;
 
-    // Códigos de erro predefinidos
-    public static final int CONECTION_ERROR = 0;
+    /**
+     * Código de error: error de conexión.
+     */
+    public static final int CONNECTION_ERROR = 0;
+    /**
+     * Código de error: no se puede leer.
+     */
     public static final int CANNOT_READ = 1;
+    /**
+     * Código de error: no se puede escribir.
+     */
     public static final int CANNOT_WRITE = 2;
 
     /**
-     * Construtor da excepción de persistencia.
+     * Constructor de la excepción de persistencia.
      *
-     * @param code Código do erro (CONECTION_ERROR, CANNOT_READ, CANNOT_WRITE)
-     * @param message Mensaxe descritiva do erro
+     * @param code    Código del error (CONNECTION_ERROR, CANNOT_READ, CANNOT_WRITE)
+     * @param message Mensaje descriptivo del error
      */
     public PersistenceException(int code, String message) {
         super(message);
@@ -28,9 +39,9 @@ public class PersistenceException extends Exception {
     }
 
     /**
-     * Obtén o código de erro asociado á excepción.
+     * Obtiene el código de error asociado a la excepción.
      *
-     * @return código do erro
+     * @return código del error
      */
     public int getCode() {
         return code;
