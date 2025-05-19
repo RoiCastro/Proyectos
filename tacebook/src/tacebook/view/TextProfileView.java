@@ -80,6 +80,7 @@ public class TextProfileView implements ProfileView {
      * 
      * @param profile el perfil a mostrar
      */
+    @Override
     public void showProfileMenu(Profile profile) {
         boolean ownProfile = profile.getName().equals(profileController.getSessionProfile().getName());
         Scanner scanner = new Scanner(System.in);
@@ -206,10 +207,21 @@ public class TextProfileView implements ProfileView {
      * @param profile el perfil donde comentar
      */
     private void commentPost(Scanner scanner, Profile profile) {
-        int index = selectElement("Selecciona publicación: ", profile.getPosts().size(), scanner);
+        // Recopilar todos los posts visibles (propios y de amigos si es perfil propio)
+        java.util.List<Post> allPosts = new java.util.ArrayList<>(profile.getPosts());
+        if (profile.equals(profileController.getSessionProfile())) {
+            for (Profile friend : profile.getFriends()) {
+                allPosts.addAll(friend.getPosts());
+            }
+        }
+        allPosts.sort((a, b) -> b.getDate().compareTo(a.getDate()));
+        
+        int index = selectElement("Selecciona publicación: ", allPosts.size(), scanner);
+        if (index == -1) return;
+        
         System.out.print("Texto do comentario: ");
         String text = scanner.nextLine();
-        profileController.newComment(profile.getPosts().get(index), text);
+        profileController.newComment(allPosts.get(index), text);
     }
 
     /**
@@ -220,6 +232,7 @@ public class TextProfileView implements ProfileView {
      */
     private void addLike(Scanner scanner, Profile profile) {
         int index = selectElement("Selecciona publicación para dar like: ", profile.getPosts().size(), scanner);
+        if (index == -1) return;
         profileController.newLike(profile.getPosts().get(index));
     }
 
@@ -233,6 +246,7 @@ public class TextProfileView implements ProfileView {
     private void showBiography(boolean ownProfile, Scanner scanner, Profile profile) {
         if (ownProfile) {
             int index = selectElement("Selecciona amizade para ver perfil: ", profile.getFriends().size(), scanner);
+            if (index == -1) return;
             profileController.setShownProfile(profile.getFriends().get(index));
         } else {
             profileController.setShownProfile(profileController.getSessionProfile());
@@ -285,6 +299,7 @@ public class TextProfileView implements ProfileView {
         Profile dest;
         if (ownProfile) {
             int index = selectElement("Selecciona amizade para enviar mensaxe: ", profile.getFriends().size(), scanner);
+            if (index == -1) return;
             dest = profile.getFriends().get(index);
         } else {
             dest = profile;
@@ -303,6 +318,7 @@ public class TextProfileView implements ProfileView {
      */
     private void readPrivateMessage(boolean ownProfile, Scanner scanner, Profile profile) {
         int index = selectElement("Selecciona mensaxe: ", profile.getMessages().size(), scanner);
+        if (index == -1) return;
         Message message = profile.getMessages().get(index);
         System.out.println("\n--- Mensaxe completa ---");
         System.out.println("De: " + message.getSourceProfile().getName());
@@ -335,6 +351,7 @@ public class TextProfileView implements ProfileView {
      */
     private void deletePrivateMessage(boolean ownProfile, Scanner scanner, Profile profile) {
         int index = selectElement("Selecciona mensaxe para borrar: ", profile.getMessages().size(), scanner);
+        if (index == -1) return;
         profileController.deleteMessage(profile.getMessages().get(index));
     }
 
@@ -376,6 +393,7 @@ public class TextProfileView implements ProfileView {
      * 
      * @return número de publicaciones mostradas
      */
+    @Override
     public int getPostsShowed() {
         return postsShowed;
     }
@@ -383,6 +401,7 @@ public class TextProfileView implements ProfileView {
     /**
      * Muestra un mensaje cuando el perfil no se encuentra.
      */
+    @Override
     public void showProfileNotFoundMessage() {
         System.out.println("Perfil non atopado.");
     }
@@ -390,6 +409,7 @@ public class TextProfileView implements ProfileView {
     /**
      * Muestra un mensaje cuando se intenta dar like a la propia publicación.
      */
+    @Override
     public void showCannotLikeOwnPostMessage() {
         System.out.println("Non podes facer like á túa propia publicación.");
     }
@@ -397,6 +417,7 @@ public class TextProfileView implements ProfileView {
     /**
      * Muestra un mensaje cuando ya se ha dado like a una publicación.
      */
+    @Override
     public void showAlreadyLikedPostMessage() {
         System.out.println("Xa fixeches like nesta publicación.");
     }
@@ -406,6 +427,7 @@ public class TextProfileView implements ProfileView {
      * 
      * @param profileName nombre del perfil
      */
+    @Override
     public void showIsAlreadyFriendMessage(String profileName) {
         System.out.println("Xa tes amizade con " + profileName);
     }
@@ -426,6 +448,13 @@ public class TextProfileView implements ProfileView {
      */
     public void showDuplicateFrienshipRequestMessage(String profileName) {
         System.out.println("Xa tes unha solicitude pendente con " + profileName);
+    }
+
+    /**
+     * Muestra un mensaje cuando se intenta enviarse una solicitud de amistad a sí mismo.
+     */
+    public void showCannotAddSelfAsFriendMessage() {
+        System.out.println("Non podes enviarte unha solicitude de amizade a ti mesmo.");
     }
 
     /**

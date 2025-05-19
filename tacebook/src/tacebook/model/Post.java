@@ -134,4 +134,23 @@ public class Post {
     public void setText(String text) {
         this.text = text;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Post other = (Post) obj;
+        
+        // Dos posts son iguales si tienen el mismo id y autor
+        return id == other.id && 
+               (author == null ? other.author == null : author.equals(other.author));
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 31 * hash + id;
+        hash = 31 * hash + (author != null ? author.hashCode() : 0);
+        return hash;
+    }
 }

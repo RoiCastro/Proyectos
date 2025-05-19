@@ -45,6 +45,7 @@ public interface InitMenuView {
 
     /**
      * Muestra el menú de registro de usuario.
+     * @return 
      */
-    public void showRegisterMenu();
+    public boolean showRegisterMenu();
 }

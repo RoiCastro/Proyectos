@@ -107,8 +107,8 @@ public class ProfileController {
         this.shownProfile = sessionProfile;
         profileView.showProfileMenu(shownProfile);
 
-        if (profileView instanceof GUIProfileView) {
-            ((GUIProfileView) profileView).setVisible(true); // AQUI se fai visible
+        if (profileView instanceof GUIProfileView gUIProfileView) {
+            gUIProfileView.setVisible(true); // AQUI se fai visible
         }
     }
 
@@ -136,7 +136,10 @@ public class ProfileController {
      */
     public void newPost(String text, Profile destProfile) {
         try {
-            Post post = new Post(0, new Date(), text);
+            if (text == null || text.trim().isEmpty() || destProfile == null) {
+                return;
+            }
+            Post post = new Post(0, new Date(), text.trim());
             post.setAuthor(sessionProfile);
             PostDB.save(post);
             reloadProfile();
@@ -190,8 +193,19 @@ public class ProfileController {
         try {
             Profile destProfile = ProfileDB.findByName(profileName, profileView.getPostsShowed());
 
-            if (destProfile != null
-                    && !sessionProfile.getFriends().contains(destProfile)
+            if (destProfile == null) {
+                profileView.showProfileNotFoundMessage();
+                return;
+            }
+            if (destProfile.equals(sessionProfile)) {
+                if (profileView instanceof tacebook.view.GUIProfileView gui) {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Non podes enviarte unha solicitude de amizade a ti mesmo.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+                } else {
+                    System.out.println("Non podes enviarte unha solicitude de amizade a ti mesmo.");
+                }
+                return;
+            }
+            if (!sessionProfile.getFriends().contains(destProfile)
                     && !sessionProfile.getFriendshipRequests().contains(destProfile)
                     && !destProfile.getFriendshipRequests().contains(sessionProfile)) {
                 ProfileDB.saveFriendshipRequest(destProfile, sessionProfile);
@@ -292,5 +306,48 @@ public class ProfileController {
         } catch (PersistenceException e) {
             System.out.println("Erro ao responder mensaxe: " + e.getMessage());
         }
+    }
+
+    public void showProfileMenu(Profile profile) {
+        if (profile == null) return;
+        
+        // Crear un nuevo perfil temporal para mostrar
+        Profile temp = new Profile(profile.getName(), profile.getPassword(), profile.getStatus());
+        
+        // Recoger todos los posts (propios y de amigos) si es el perfil de sesión
+        java.util.Set<Post> allPosts = new java.util.TreeSet<>((a, b) -> {
+            int dateCompare = b.getDate().compareTo(a.getDate());
+            return dateCompare != 0 ? dateCompare : Integer.compare(b.getId(), a.getId());
+        });
+        
+        // Añadir posts propios
+        if (profile.getPosts() != null) {
+            allPosts.addAll(profile.getPosts());
+        }
+        
+        // Si es el perfil propio, añadir también los posts de amigos
+        if (profile.equals(sessionProfile)) {
+            for (Profile friend : profile.getFriends()) {
+                if (friend != null && friend.getPosts() != null) {
+                    allPosts.addAll(friend.getPosts());
+                }
+            }
+        }
+        
+        // Convertir a lista y limitar número de posts
+        java.util.List<Post> toShow = new java.util.ArrayList<>(allPosts);
+        int max = Math.min(getPostsShowed(), toShow.size());
+        if (max > 0) {
+            toShow = toShow.subList(0, max);
+        }
+        
+        // Añadir los posts y resto de información al perfil temporal
+        temp.getPosts().addAll(toShow);
+        temp.getFriends().addAll(profile.getFriends());
+        temp.getFriendshipRequests().addAll(profile.getFriendshipRequests());
+        temp.getMessages().addAll(profile.getMessages());
+        
+        // Mostrar el perfil temporal
+        profileView.showProfileMenu(temp);
     }
 }

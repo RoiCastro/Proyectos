@@ -60,6 +60,11 @@ public interface ProfileView {
     public void showDuplicateFrienshipRequestMessage(String profileName);
 
     /**
+     * Muestra un mensaje cuando se intenta enviarse una solicitud de amistad a sí mismo.
+     */
+    public void showCannotAddSelfAsFriendMessage();
+
+    /**
      * Muestra un mensaje de error de conexión.
      */
     public void showConnectionErrorMessage();

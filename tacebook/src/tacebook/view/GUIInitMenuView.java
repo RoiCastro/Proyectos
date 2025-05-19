@@ -87,7 +87,7 @@ public class GUIInitMenuView implements InitMenuView {
      * Muestra el menú de registro de usuario.
      */
     @Override
-    public void showRegisterMenu() {
+    public boolean showRegisterMenu() {
         JTextField usernameField = new JTextField();
         JPasswordField passwordField = new JPasswordField();
         JPasswordField repeatPasswordField = new JPasswordField();
@@ -110,13 +110,17 @@ public class GUIInitMenuView implements InitMenuView {
             String status = statusField.getText();
 
             if (!password.equals(repeatPassword)) {
-                JOptionPane.showMessageDialog(null, "Os contrasinais non coinciden. Volvendo ao menú de inicio de sesión.", "Erro",
-                        JOptionPane.ERROR_MESSAGE);
-                return; // Volver al menú de inicio de sesión
+                JOptionPane.showMessageDialog(null, 
+                    "Os contrasinais non coinciden.", 
+                    "Erro", 
+                    JOptionPane.ERROR_MESSAGE);
+                return false; // Volver al menú principal sin registrar
             }
 
             controller.createProfile(username, password, status); // chama ao controlador
+            return true;
         }
+        return false; // Si cancela, volver al menú principal
     }
 
     /**
@@ -124,7 +128,11 @@ public class GUIInitMenuView implements InitMenuView {
      */
     @Override
     public void showLoginErrorMessage() {
-        JOptionPane.showMessageDialog(null, "Login incorrecto.", "Erro", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, 
+            "Usuario ou contrasinal incorrectos.", 
+            "Erro de acceso", 
+            JOptionPane.ERROR_MESSAGE);
+        // No llamar a showLoginMenu() aquí, el bucle principal lo hará
     }
 
     /**

@@ -41,21 +41,24 @@ public class TextInitMenuView implements InitMenuView {
             String option = scanner.nextLine();
 
             switch (option) {
-                case "1":
+                case "1" -> {
                     System.out.print("Nombre de usuario: ");
                     String name = scanner.nextLine();
                     System.out.print("Contraseña: ");
                     String password = scanner.nextLine();
                     initMenuController.login(name, password);
-                    break;
-                case "2":
-                    initMenuController.register();
-                    return true; // <-- Añadido: salir del bucle tras registro
-                case "3":
+                    // No salir del bucle, volver al menú si login incorrecto
+                }
+                case "2" -> {
+                    boolean registered = showRegisterMenu();
+                    if (registered) return false; // Solo salir si el registro fue exitoso
+                    // Si no, volver al menú principal
+                }
+                case "3" -> {
                     System.out.println("Saliendo de la aplicación...");
                     return true;
-                default:
-                    System.out.println("Opción no válida, intenta de nuevo.");
+                }
+                default -> System.out.println("Opción no válida, intenta de nuevo.");
             }
         }
     }
@@ -65,14 +68,15 @@ public class TextInitMenuView implements InitMenuView {
      */
     @Override
     public void showLoginErrorMessage() {
-        System.out.println("Error: Usuario o contraseña incorrectos.");
+        System.out.println("Usuario ou contrasinal incorrectos.");
+        // No es necesario hacer nada más, el bucle principal seguirá ejecutándose
     }
 
     /**
      * Muestra el menú de registro de usuario por consola.
      */
     @Override
-    public void showRegisterMenu() {
+    public boolean showRegisterMenu() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("\n--- REGISTRO DE NUEVO PERFIL ---");
         String name;
@@ -91,8 +95,8 @@ public class TextInitMenuView implements InitMenuView {
             password2 = scanner.nextLine();
 
             if (!password.equals(password2)) {
-                System.out.println("Las contraseñas no coinciden, volviendo al menú de inicio de sesión.");
-                return; // Volver al menú de inicio de sesión
+                System.out.println("Os contrasinais non coinciden.");
+                return false; // Volver al menú principal sin registrar
             }
             break;
         }
@@ -101,6 +105,7 @@ public class TextInitMenuView implements InitMenuView {
         status = scanner.nextLine();
 
         initMenuController.createProfile(name, password, status);
+        return true;
     }
 
     /**

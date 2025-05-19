@@ -138,4 +138,29 @@ public class Profile {
     public ArrayList<Profile> getFriendshipRequests() {
         return friendshipRequests;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Profile other = (Profile) obj;
+        return name != null && name.equalsIgnoreCase(other.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name != null ? name.toLowerCase().hashCode() : 0;
+    }
+
+    public void addPost(Post post) {
+        if (post != null && !posts.contains(post)) {
+            posts.add(0, post); // Añadir al inicio para mantener orden cronológico inverso
+        }
+    }
+
+    public void addFriend(Profile friend) {
+        if (friend != null && !friends.contains(friend)) {
+            friends.add(friend);
+        }
+    }
 }

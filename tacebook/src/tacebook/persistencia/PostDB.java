@@ -20,9 +20,10 @@ public class PostDB {
      * @throws PersistenceException Si ocurre un error de persistencia.
      */
     public static void save(Post post) throws PersistenceException {
-        Profile profile = post.getAuthor();
-        if (profile != null) {
-            profile.getPosts().add(0, post); // Añadir al inicio de la lista
+        if (post != null && post.getAuthor() != null) {
+            // Asignar un ID único basado en timestamp
+            post.setId((int) (System.currentTimeMillis() % Integer.MAX_VALUE));
+            post.getAuthor().getPosts().add(0, post); // Añadir al inicio para mantener orden cronológico inverso
         }
     }
 

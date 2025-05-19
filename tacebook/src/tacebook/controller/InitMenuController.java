@@ -85,6 +85,7 @@ public class InitMenuController {
 
             if (profile == null) {
                 initMenuView.showLoginErrorMessage();
+                // No retornamos, el bucle principal seguirá ejecutándose
             } else {
                 profileController.openSession(profile);
             }
@@ -98,11 +99,12 @@ public class InitMenuController {
     /**
      * Muestra el menú de registro para crear un nuevo perfil.
      */
-    public void register() {
+    public boolean register() {
         try {
-            initMenuView.showRegisterMenu();
+            return initMenuView.showRegisterMenu();
         } catch (Exception e) {
             System.out.println("Erro inesperado ao mostrar o menú de rexistro: " + e.getMessage());
+            return false;
         }
     }
 
@@ -121,7 +123,7 @@ public class InitMenuController {
                 name = initMenuView.showNewNameMenu();
                 if (name == null || name.trim().isEmpty()) {
                     System.out.println("Nome de usuario non pode estar baleiro.");
-                    continue;
+                    return; // Evita bucle infinito si el usuario cancela
                 }
                 existingProfile = ProfileDB.findByName(name, 0);
             }

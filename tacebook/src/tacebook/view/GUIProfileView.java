@@ -70,14 +70,27 @@ public class GUIProfileView extends javax.swing.JDialog implements ProfileView {
      */
     @Override
     public void showProfileMenu(Profile profile) {
+        if (profile == null) return;
+
         labelNomeDoPerfil.setText("Perfil do usuario: " + profile.getName());
         labelEstadoActual.setText("Estado actual: " + profile.getStatus());
 
-        // Rellenar la tabla de publicaciones con los datos del usuario
+        // Recopilar publicaciones propias y de amigos
+        java.util.List<tacebook.model.Post> allPosts = new java.util.ArrayList<>();
+        // Añadir publicaciones propias
+        allPosts.addAll(profile.getPosts());
+        // Añadir publicaciones de amigos
+        java.util.List<tacebook.model.Profile> friends = profile.getFriends();
+        for (tacebook.model.Profile friend : friends) {
+            allPosts.addAll(friend.getPosts());
+        }
+        // Ordenar por fecha descendente (más reciente primero)
+        allPosts.sort((a, b) -> b.getDate().compareTo(a.getDate()));
+
+        // Rellenar la tabla de publicaciones con los datos recopilados
         javax.swing.table.TableModel model = tablaPublicaciones.getModel();
-        java.util.List<tacebook.model.Post> posts = profile.getPosts();
         int maxRows = model.getRowCount();
-        int postsToShow = Math.min(posts.size(), maxRows);
+        int postsToShow = Math.min(allPosts.size(), maxRows);
 
         // Limpiar la tabla de publicaciones
         for (int i = 0; i < maxRows; i++) {
@@ -88,7 +101,7 @@ public class GUIProfileView extends javax.swing.JDialog implements ProfileView {
 
         // Rellenar con los datos de las publicaciones si existen
         for (int i = 0; i < postsToShow; i++) {
-            tacebook.model.Post post = posts.get(i);
+            tacebook.model.Post post = allPosts.get(i);
             model.setValueAt(post.getDate(), i, 0); // Fecha
             model.setValueAt(post.getAuthor() != null ? post.getAuthor().getName() : "", i, 1); // Autor
             model.setValueAt(post.getText(), i, 2); // Texto
@@ -103,10 +116,9 @@ public class GUIProfileView extends javax.swing.JDialog implements ProfileView {
                 commentModel.setValueAt(null, i, j);
             }
         }
-        // Si hay publicaciones y alguna seleccionada, mostrar sus comentarios
         int selectedPost = tablaPublicaciones.getSelectedRow();
-        if (selectedPost >= 0 && selectedPost < posts.size()) {
-            java.util.List<tacebook.model.Comment> comments = posts.get(selectedPost).getComments();
+        if (selectedPost >= 0 && selectedPost < allPosts.size()) {
+            java.util.List<tacebook.model.Comment> comments = allPosts.get(selectedPost).getComments();
             int commentsToShow = Math.min(comments.size(), commentRows);
             for (int i = 0; i < commentsToShow; i++) {
                 tacebook.model.Comment comment = comments.get(i);
@@ -115,6 +127,23 @@ public class GUIProfileView extends javax.swing.JDialog implements ProfileView {
                 commentModel.setValueAt(comment.getDate(), i, 2);
             }
         }
+
+        // Rellenar la tabla de amigos
+        javax.swing.table.DefaultTableModel amigosModel = (javax.swing.table.DefaultTableModel) tablaListaAmigos.getModel();
+        java.util.List<tacebook.model.Profile> friendsList = profile.getFriends();
+        // Limpiar tabla
+        while (amigosModel.getRowCount() > 0) amigosModel.removeRow(0);
+        for (tacebook.model.Profile friend : friendsList) {
+            amigosModel.addRow(new Object[]{friend.getName(), friend.getStatus()});
+        }
+
+        // Rellenar la lista de solicitudes de amistad
+        java.util.List<tacebook.model.Profile> requests = profile.getFriendshipRequests();
+        javax.swing.DefaultListModel<String> listModel = new javax.swing.DefaultListModel<>();
+        for (tacebook.model.Profile req : requests) {
+            listModel.addElement(req.getName());
+        }
+        listaSolicitudesAmistad.setModel(listModel);
     }
 
     /**
@@ -207,6 +236,17 @@ public class GUIProfileView extends javax.swing.JDialog implements ProfileView {
     }
 
     /**
+     * Muestra un mensaje cuando se intenta enviar una solicitud de amistad a uno mismo.
+     */
+    @Override
+    public void showCannotAddSelfAsFriendMessage() {
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "Non podes enviarte unha solicitude de amizade a ti mesmo.",
+                "Erro",
+                javax.swing.JOptionPane.ERROR_MESSAGE);
+    }
+
+    /**
      * Este método es llamado desde el constructor para inicializar el
      * formulario. ADVERTENCIA: No modificar este código. El contenido de este
      * método siempre es regenerado por el Form Editor.
@@ -239,9 +279,19 @@ public class GUIProfileView extends javax.swing.JDialog implements ProfileView {
         jSplitPane2 = new javax.swing.JSplitPane();
         panelListaAmigos = new javax.swing.JPanel();
         labelListaAmigos = new javax.swing.JLabel();
+        scrollPanelPublicaiones1 = new javax.swing.JScrollPane();
+        tablaListaAmigos = new javax.swing.JTable();
+        botonVerBiografia = new javax.swing.JButton();
+        botonEnviarMensaxesPrivadas = new javax.swing.JButton();
         panelSolicitudesAmistad = new javax.swing.JPanel();
         labelSolicitudesAmistad = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
+        scrollPanelAmista = new javax.swing.JScrollPane();
+        listaSolicitudesAmistad = new javax.swing.JList<>();
+        botonDenegarSolicitud = new javax.swing.JButton();
+        botonNuevaSolicitudAmistad = new javax.swing.JButton();
+        botonAceptarSolicitud = new javax.swing.JButton();
+        menxasesPrivados = new javax.swing.JPanel();
+        footer = new javax.swing.JPanel();
         botonCerrarSesion = new javax.swing.JButton();
         botonEditarPerfil = new javax.swing.JButton();
 
@@ -292,6 +342,10 @@ public class GUIProfileView extends javax.swing.JDialog implements ProfileView {
             }
         ));
         scrollPanelPublicaiones.setViewportView(tablaPublicaciones);
+        if (tablaPublicaciones.getColumnModel().getColumnCount() > 0) {
+            tablaPublicaciones.getColumnModel().getColumn(2).setHeaderValue("Texto");
+            tablaPublicaciones.getColumnModel().getColumn(3).setHeaderValue("Me gustas");
+        }
 
         botonComentar.setText("Comentar");
         botonComentar.addActionListener(new java.awt.event.ActionListener() {
@@ -410,24 +464,62 @@ public class GUIProfileView extends javax.swing.JDialog implements ProfileView {
 
         panelListaAmigos.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        labelListaAmigos.setText("Lista de amigos");
+        labelListaAmigos.setText("Lista de amig@s:");
         labelListaAmigos.setToolTipText("Aquí se muestra tu lista de amigos");
+
+        tablaListaAmigos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Nome", "Estado"
+            }
+        ));
+        scrollPanelPublicaiones1.setViewportView(tablaListaAmigos);
+
+        botonVerBiografia.setText("Ver biografía");
+        botonVerBiografia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonVerBiografiaActionPerformed(evt);
+            }
+        });
+
+        botonEnviarMensaxesPrivadas.setText("Enviar mensaxe privada");
+        botonEnviarMensaxesPrivadas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonEnviarMensaxesPrivadasActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelListaAmigosLayout = new javax.swing.GroupLayout(panelListaAmigos);
         panelListaAmigos.setLayout(panelListaAmigosLayout);
         panelListaAmigosLayout.setHorizontalGroup(
             panelListaAmigosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelListaAmigosLayout.createSequentialGroup()
-                .addGap(241, 241, 241)
                 .addComponent(labelListaAmigos)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(scrollPanelPublicaiones1)
+            .addGroup(panelListaAmigosLayout.createSequentialGroup()
+                .addContainerGap(402, Short.MAX_VALUE)
+                .addComponent(botonVerBiografia)
+                .addGap(18, 18, 18)
+                .addComponent(botonEnviarMensaxesPrivadas)
+                .addContainerGap(403, Short.MAX_VALUE))
         );
         panelListaAmigosLayout.setVerticalGroup(
             panelListaAmigosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelListaAmigosLayout.createSequentialGroup()
-                .addGap(56, 56, 56)
                 .addComponent(labelListaAmigos)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scrollPanelPublicaiones1, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(panelListaAmigosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(botonVerBiografia)
+                    .addComponent(botonEnviarMensaxesPrivadas))
+                .addContainerGap())
         );
 
         jSplitPane2.setLeftComponent(panelListaAmigos);
@@ -437,21 +529,62 @@ public class GUIProfileView extends javax.swing.JDialog implements ProfileView {
         labelSolicitudesAmistad.setText("Solicitudes de amistad");
         labelSolicitudesAmistad.setToolTipText("Solicitudes pendientes de amistad");
 
+        scrollPanelAmista.setViewportView(listaSolicitudesAmistad);
+
+        botonDenegarSolicitud.setText("Rexeitar solicitude");
+        botonDenegarSolicitud.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonDenegarSolicitudActionPerformed(evt);
+            }
+        });
+
+        botonNuevaSolicitudAmistad.setText("Nova solicitude de amizade");
+        botonNuevaSolicitudAmistad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonNuevaSolicitudAmistadActionPerformed(evt);
+            }
+        });
+
+        botonAceptarSolicitud.setText("Aceptar solicitude");
+        botonAceptarSolicitud.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonAceptarSolicitudActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelSolicitudesAmistadLayout = new javax.swing.GroupLayout(panelSolicitudesAmistad);
         panelSolicitudesAmistad.setLayout(panelSolicitudesAmistadLayout);
         panelSolicitudesAmistadLayout.setHorizontalGroup(
             panelSolicitudesAmistadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelSolicitudesAmistadLayout.createSequentialGroup()
-                .addContainerGap(928, Short.MAX_VALUE)
-                .addComponent(labelSolicitudesAmistad)
-                .addGap(27, 27, 27))
+                .addGroup(panelSolicitudesAmistadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(scrollPanelAmista, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelSolicitudesAmistadLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(labelSolicitudesAmistad)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelSolicitudesAmistadLayout.createSequentialGroup()
+                        .addContainerGap(153, Short.MAX_VALUE)
+                        .addComponent(botonAceptarSolicitud, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(botonDenegarSolicitud, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(botonNuevaSolicitudAmistad, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 150, Short.MAX_VALUE)))
+                .addGap(0, 0, 0))
         );
         panelSolicitudesAmistadLayout.setVerticalGroup(
             panelSolicitudesAmistadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelSolicitudesAmistadLayout.createSequentialGroup()
-                .addGap(102, 102, 102)
                 .addComponent(labelSolicitudesAmistad)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(scrollPanelAmista, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(panelSolicitudesAmistadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(botonDenegarSolicitud)
+                    .addComponent(botonNuevaSolicitudAmistad)
+                    .addComponent(botonAceptarSolicitud))
+                .addContainerGap())
         );
 
         jSplitPane2.setRightComponent(panelSolicitudesAmistad);
@@ -468,6 +601,19 @@ public class GUIProfileView extends javax.swing.JDialog implements ProfileView {
         );
 
         cuerpo.addTab("Amig@s", amigos);
+
+        javax.swing.GroupLayout menxasesPrivadosLayout = new javax.swing.GroupLayout(menxasesPrivados);
+        menxasesPrivados.setLayout(menxasesPrivadosLayout);
+        menxasesPrivadosLayout.setHorizontalGroup(
+            menxasesPrivadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1077, Short.MAX_VALUE)
+        );
+        menxasesPrivadosLayout.setVerticalGroup(
+            menxasesPrivadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 323, Short.MAX_VALUE)
+        );
+
+        cuerpo.addTab("Mensaxes privadas", menxasesPrivados);
 
         botonCerrarSesion.setMnemonic('C');
         botonCerrarSesion.setText("Cerrar sesión");
@@ -487,22 +633,22 @@ public class GUIProfileView extends javax.swing.JDialog implements ProfileView {
             }
         });
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        javax.swing.GroupLayout footerLayout = new javax.swing.GroupLayout(footer);
+        footer.setLayout(footerLayout);
+        footerLayout.setHorizontalGroup(
+            footerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(footerLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(botonCerrarSesion)
                 .addGap(43, 43, 43)
                 .addComponent(botonEditarPerfil)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        footerLayout.setVerticalGroup(
+            footerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(footerLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(footerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonCerrarSesion)
                     .addComponent(botonEditarPerfil))
                 .addGap(13, 13, 13))
@@ -513,7 +659,7 @@ public class GUIProfileView extends javax.swing.JDialog implements ProfileView {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(cabecera, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(footer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(cuerpo)
         );
         layout.setVerticalGroup(
@@ -523,7 +669,7 @@ public class GUIProfileView extends javax.swing.JDialog implements ProfileView {
                 .addGap(18, 18, 18)
                 .addComponent(cuerpo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(footer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1))
         );
 
@@ -581,15 +727,26 @@ public class GUIProfileView extends javax.swing.JDialog implements ProfileView {
     }//GEN-LAST:event_botonGustameActionPerformed
 
     private void botonComentarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonComentarActionPerformed
-        // Comenta la publicación seleccionada
         int row = tablaPublicaciones.getSelectedRow();
         if (row >= 0) {
-            java.util.List<tacebook.model.Post> posts = profileController.getShownProfile().getPosts();
-            if (row < posts.size()) {
+            java.util.List<tacebook.model.Post> allPosts = new java.util.ArrayList<>();
+            Profile profile = profileController.getShownProfile();
+            
+            // Recopilar todos los posts (propios y de amigos)
+            allPosts.addAll(profile.getPosts());
+            if (profile.equals(profileController.getSessionProfile())) {
+                for (Profile friend : profile.getFriends()) {
+                    allPosts.addAll(friend.getPosts());
+                }
+            }
+            
+            // Ordenar por fecha descendente
+            allPosts.sort((a, b) -> b.getDate().compareTo(a.getDate()));
+            
+            if (row < allPosts.size()) {
                 String texto = javax.swing.JOptionPane.showInputDialog(this, "Introduce o texto do comentario:");
                 if (texto != null && !texto.trim().isEmpty()) {
-                    profileController.newComment(posts.get(row), texto);
-                    // Refrescar la vista para mostrar el nuevo comentario
+                    profileController.newComment(allPosts.get(row), texto);
                     showProfileMenu(profileController.getShownProfile());
                 }
             }
@@ -607,21 +764,92 @@ public class GUIProfileView extends javax.swing.JDialog implements ProfileView {
     }//GEN-LAST:event_botonCerrarSesionActionPerformed
 
     private void botonEditarPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEditarPerfilActionPerformed
-        // TODO add your handling code here:
+        // Mostrar un cuadro de diálogo para editar el estado
+        String estadoActual = profileController.getSessionProfile().getStatus();
+        String nuevoEstado = javax.swing.JOptionPane.showInputDialog(this, "Edita o teu estado:", estadoActual);
+        if (nuevoEstado != null && !nuevoEstado.trim().isEmpty() && !nuevoEstado.equals(estadoActual)) {
+            profileController.updateProfileStatus(nuevoEstado.trim());
+            javax.swing.JOptionPane.showMessageDialog(this, "Estado actualizado.");
+            showProfileMenu(profileController.getShownProfile());
+        }
     }//GEN-LAST:event_botonEditarPerfilActionPerformed
+
+    private void botonVerBiografiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonVerBiografiaActionPerformed
+        int row = tablaListaAmigos.getSelectedRow();
+        java.util.List<tacebook.model.Profile> friends = profileController.getShownProfile().getFriends();
+        if (row >= 0 && row < friends.size()) {
+            profileController.setShownProfile(friends.get(row));
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un amigo para ver su biografía.");
+        }
+    }//GEN-LAST:event_botonVerBiografiaActionPerformed
+
+    private void botonEnviarMensaxesPrivadasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEnviarMensaxesPrivadasActionPerformed
+        int row = tablaListaAmigos.getSelectedRow();
+        java.util.List<tacebook.model.Profile> friends = profileController.getShownProfile().getFriends();
+        if (row >= 0 && row < friends.size()) {
+            String texto = javax.swing.JOptionPane.showInputDialog(this, "Introduce o texto da mensaxe privada:");
+            if (texto != null && !texto.trim().isEmpty()) {
+                profileController.newMessage(friends.get(row), texto);
+                javax.swing.JOptionPane.showMessageDialog(this, "Mensaxe enviada.");
+            }
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un amigo para enviar mensaxe privada.");
+        }
+    }//GEN-LAST:event_botonEnviarMensaxesPrivadasActionPerformed
+
+    private void botonNuevaSolicitudAmistadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonNuevaSolicitudAmistadActionPerformed
+        String nombre = javax.swing.JOptionPane.showInputDialog(this, "Introduce o nome do usuario ao que enviar solicitude:");
+        if (nombre != null && !nombre.trim().isEmpty()) {
+            if (nombre.equals(profileController.getSessionProfile().getName())) {
+                showCannotAddSelfAsFriendMessage();
+                return;
+            }
+            profileController.newFriendshipRequest(nombre.trim());
+        }
+    }//GEN-LAST:event_botonNuevaSolicitudAmistadActionPerformed
+
+    private void botonAceptarSolicitudActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAceptarSolicitudActionPerformed
+        int idx = listaSolicitudesAmistad.getSelectedIndex();
+        java.util.List<tacebook.model.Profile> requests = profileController.getShownProfile().getFriendshipRequests();
+        if (idx >= 0 && idx < requests.size()) {
+            profileController.acceptFriendshipRequest(requests.get(idx));
+            javax.swing.JOptionPane.showMessageDialog(this, "Solicitude aceptada.");
+            showProfileMenu(profileController.getShownProfile());
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona unha solicitude para aceptar.");
+        }
+    }//GEN-LAST:event_botonAceptarSolicitudActionPerformed
+
+    private void botonDenegarSolicitudActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDenegarSolicitudActionPerformed
+        int idx = listaSolicitudesAmistad.getSelectedIndex();
+        java.util.List<tacebook.model.Profile> requests = profileController.getShownProfile().getFriendshipRequests();
+        if (idx >= 0 && idx < requests.size()) {
+            profileController.rejectFriendshipRequest(requests.get(idx));
+            javax.swing.JOptionPane.showMessageDialog(this, "Solicitude rexeitada.");
+            showProfileMenu(profileController.getShownProfile());
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona unha solicitude para rexeitar.");
+        }
+    }//GEN-LAST:event_botonDenegarSolicitudActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel amigos;
     private javax.swing.JPanel biografia;
+    private javax.swing.JButton botonAceptarSolicitud;
     private javax.swing.JButton botonCerrarSesion;
     private javax.swing.JButton botonComentar;
+    private javax.swing.JButton botonDenegarSolicitud;
     private javax.swing.JButton botonEditarPerfil;
+    private javax.swing.JButton botonEnviarMensaxesPrivadas;
     private javax.swing.JButton botonGustame;
     private javax.swing.JButton botonNovaPublicacion;
+    private javax.swing.JButton botonNuevaSolicitudAmistad;
     private javax.swing.JButton botonVerAnterioresPublicacions;
+    private javax.swing.JButton botonVerBiografia;
     private javax.swing.JPanel cabecera;
     private javax.swing.JTabbedPane cuerpo;
-    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel footer;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JLabel labelComentarios;
@@ -631,13 +859,18 @@ public class GUIProfileView extends javax.swing.JDialog implements ProfileView {
     private javax.swing.JLabel labelNomeDoPerfil;
     private javax.swing.JLabel labelPublicacions;
     private javax.swing.JLabel labelSolicitudesAmistad;
+    private javax.swing.JList<String> listaSolicitudesAmistad;
+    private javax.swing.JPanel menxasesPrivados;
     private javax.swing.JPanel panelComentario;
     private javax.swing.JPanel panelListaAmigos;
     private javax.swing.JPanel panelPublicaiones;
     private javax.swing.JPanel panelSolicitudesAmistad;
+    private javax.swing.JScrollPane scrollPanelAmista;
     private javax.swing.JScrollPane scrollPanelComentarios;
     private javax.swing.JScrollPane scrollPanelPublicaiones;
+    private javax.swing.JScrollPane scrollPanelPublicaiones1;
     private javax.swing.JTable tablaComentarios;
+    private javax.swing.JTable tablaListaAmigos;
     private javax.swing.JTable tablaPublicaciones;
     // End of variables declaration//GEN-END:variables
 }
