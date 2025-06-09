@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="tacebook">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/tacebook.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
